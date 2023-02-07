@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.realplayer">
    <application
-        android:label="realplayer"
+        android:label="RealPlayer"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
