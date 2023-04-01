@@ -95,6 +95,12 @@ class _LoginPageState extends State<LoginPage> {
                                               _emailController.text,
                                               _passwordController.text);
                                           print(user);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                                content: Text(
+                                                    "Bravo, vous êtes connecté !")),
+                                          );
                                           // La connexion a réussi, effectuez une action en conséquence, comme naviguer vers une autre page
                                         } catch (e) {
                                           // La connexion a échoué, afficher une erreur à l'utilisateur
