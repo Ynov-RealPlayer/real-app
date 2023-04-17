@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:realplayer/login.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realplayer/themes/string.dart';
@@ -94,12 +95,12 @@ void dispose() {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => MyHomePage(),
+                        builder: (_) => LoginPage(),
                       ),
                     );
                   }
                   _pageController.nextPage(
-                    duration: Duration(milliseconds: 500), curve: Curves.ease,
+                    duration: const Duration(milliseconds: 500), curve: Curves.ease,
                   );
                 },
                 icon: SvgPicture.asset(

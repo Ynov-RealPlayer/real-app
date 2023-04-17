@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:realplayer/view/OnBoarding.view.dart';
+import 'register.dart';
+import 'login.dart';
 
 void main() {
-  runApp(const  MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OnBoardingView(),
+      home: const OnBoardingView(),
+      routes: {
+        '/RegisterPage': (context) => RegisterPage(),
+        '/LoginPage': (context) => LoginPage(),
+      },
     );
   }
 }
