@@ -8,14 +8,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: OnBoardingView(),
+      debugShowCheckedModeBanner: false,
+      home: const OnBoardingView(),
       routes: {
         '/RegisterPage': (context) => RegisterPage(),
         '/LoginPage': (context) => LoginPage(),
