@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:realplayer/view/OnBoarding.view.dart';
 import 'register.dart';
 import 'login.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      home: OnBoardingView(),
       routes: {
         '/RegisterPage': (context) => RegisterPage(),
         '/LoginPage': (context) => LoginPage(),
