@@ -11,11 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>(); // Clé pour valider le formulaire
-
-  final double ffem = 1.0;
-  final double fem = 1.0;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,36 +21,30 @@ class _LoginPageState extends State<LoginPage> {
           child: Form(
             key: _formKey,
             child: Container(
-              // connexionRPx (52:142)
               width: double.infinity,
-              height: 932 * fem,
               decoration: BoxDecoration(
                 color: Color(0xff1d2b34),
               ),
               child: Stack(
                 children: [
-
                   Positioned(
-                    // bouton
-                    left: 33 * fem,
-                    top: 100 * fem,
+                    left: 33,
+                    top: 100,
                     child: Container(
-                      width: 319 * fem,
-                      height: 480 * fem,
+                      width: 319,
+                      height: 480,
                       child: Stack(
                         children: [
                           Positioned(
-                            // rectangle4EsC (52:143)
-                            left: 0 * fem,
-                            top: 0 * fem,
+                            left: 0,
+                            top: 0,
                             child: Align(
                               child: SizedBox(
-                                width: 319 * fem,
-                                height: 469 * fem,
+                                width: 319,
+                                height: 469,
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(27 * fem),
+                                    borderRadius: BorderRadius.circular(27),
                                     color: Color(0xff1d2b34),
                                   ),
                                 ),
@@ -62,13 +52,12 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           Positioned(
-                            // Bouton de connexion
-                            left: 32 * fem,
-                            top: 428 * fem,
+                            left: 32,
+                            top: 428,
                             child: Align(
                               child: SizedBox(
-                                width: 255 * fem,
-                                height: 52 * fem,
+                                width: 255,
+                                height: 52,
                                 child: MaterialButton(
                                   onPressed: () async {
                                     if (_emailController.text.isEmpty ||
@@ -101,9 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 content: Text(
                                                     "Bravo, vous êtes connecté !")),
                                           );
-                                          // La connexion a réussi, effectuez une action en conséquence, comme naviguer vers une autre page
                                         } catch (e) {
-                                          // La connexion a échoué, afficher une erreur à l'utilisateur
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(
@@ -118,57 +105,54 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     'SE CONNECTER',
                                     style: GoogleFonts.unicaOne(
-                                      fontSize: 22 * ffem,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w400,
-                                      height: 1.1825 * ffem / fem,
                                       color: Color(0xffffffff),
                                     ),
                                   ),
                                   color: Color(0xff0272cd),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(10 * fem),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   elevation: 8,
                                 ),
                               ),
                             ),
                           ),
-
                         ],
                       ),
                     ),
                   ),
-
                   Positioned(
-                    // emailfield
-                    left: 53 * fem,
-                    top: 380 * fem,
+                    left: 53,
+                    top: 380,
                     child: SizedBox(
-                      width: 255 * fem,
-                      height: 52 * fem,
+                      width: 255,
+                      height: 52,
                       child: Row(
                         children: [
                           Icon(
                             FontAwesomeIcons.envelope,
                             color: Color(0xff0272cd),
-                            size: 36 * fem,
+                            size: 36,
                           ),
-                          SizedBox(width: 10 * fem),
+                          SizedBox(width: 10),
                           Expanded(
                             child: TextField(
                               controller: _emailController,
                               decoration: InputDecoration(
                                 hintText: 'Email',
                                 hintStyle: TextStyle(
-                                  fontSize: 18 * ffem,
+                                  fontSize: 18,
                                   color: Color(0x99ffffff),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Color(0xff0272cd)),
+                                  borderSide:
+                                  BorderSide(color: Color(0xff0272cd)),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Color(0xff0272cd)),
+                                  borderSide:
+                                  BorderSide(color: Color(0xff0272cd)),
                                 ),
                               ),
                               style: TextStyle(
@@ -180,22 +164,20 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-
                   Positioned(
-                    // passwordfield (52:185)
-                    left: 53 * fem,
-                    top: 450 * fem,
+                    left: 53,
+                    top: 450,
                     child: SizedBox(
-                      width: 255 * fem,
-                      height: 52 * fem,
+                      width: 255,
+                      height: 52,
                       child: Row(
                         children: [
                           Icon(
                             FontAwesomeIcons.lock,
                             color: Color(0xff0272cd),
-                            size: 36 * fem,
+                            size: 36,
                           ),
-                          SizedBox(width: 10 * fem),
+                          SizedBox(width: 10),
                           Expanded(
                             child: TextField(
                               controller: _passwordController,
@@ -203,14 +185,16 @@ class _LoginPageState extends State<LoginPage> {
                               decoration: InputDecoration(
                                 hintText: 'Mot de passe',
                                 hintStyle: TextStyle(
-                                  fontSize: 18 * ffem,
+                                  fontSize: 18,
                                   color: Color(0x99ffffff),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Color(0xff0272cd)),
+                                  borderSide:
+                                  BorderSide(color: Color(0xff0272cd)),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Color(0xff0272cd)),
+                                  borderSide:
+                                  BorderSide(color: Color(0xff0272cd)),
                                 ),
                               ),
                               style: TextStyle(
@@ -222,12 +206,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-
                   Positioned(
-                    // Texte "Pas encore de compte ? Cliquez ici"
                     left: 0,
                     right: 0,
-                    top: 600 * fem,
+                    top: 600,
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, '/RegisterPage');
@@ -237,30 +219,28 @@ class _LoginPageState extends State<LoginPage> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16 * ffem,
+                          fontSize: 16,
                         ),
                       ),
                     ),
                   ),
-
                   Positioned(
                     top: 90,
                     left: 95,
                     right: 100,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 200 * fem),
+                      padding: EdgeInsets.only(top: 200),
                       child: Text(
                         'CONNEXION',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 32 * ffem,
+                          fontSize: 32,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
