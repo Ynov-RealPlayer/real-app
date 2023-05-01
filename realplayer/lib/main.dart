@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:realplayer/view/Home.view.dart';
 import 'package:realplayer/view/OnBoarding.view.dart';
 import 'register.dart';
 import 'login.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const OnBoardingView(),
+      home: const HomePage(),
       routes: {
         '/UploadPost': (context) => UploadPost(),
         '/RegisterPage': (context) => RegisterPage(),
