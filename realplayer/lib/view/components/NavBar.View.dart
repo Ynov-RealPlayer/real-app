@@ -1,58 +1,65 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:realplayer/view/Boutique.View.dart';
-import 'package:realplayer/view/CoinShop.View.dart';
-import 'package:realplayer/view/Home.view.dart';
-import 'package:realplayer/view/Profile.View.dart';
-import '../Post.View.dart';
-import 'NavBar.ViewModel.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:realplayer/themes/color.dart';
 
-
-import 'package:flutter/material.dart';
-
-class CustomNavBar extends StatelessWidget {
-  final int selectedIndex;
-  final Function(int) onTap;
-
-  const CustomNavBar({super.key, required this.selectedIndex, required this.onTap});
+class NavBar extends StatelessWidget {
+  const NavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.7), // Transparence de 70%
-        borderRadius: BorderRadius.circular(20), // Bords arrondis de 20 pixels
+    return Scaffold(
+    backgroundColor: ColorTheme.backgroundColor,
+      bottomNavigationBar: SafeArea(child: Container(
+        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        decoration: const BoxDecoration(
+          color: ColorTheme.buttonColor,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              onPressed: () {},
+              // icon: const Icon(Icons.home, size: 40),
+              icon: SvgPicture.asset(
+                  "assets/icons/home.svg",
+                ),
+              color: Colors.white,
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                  "assets/icons/bitcoin.svg",
+                ),
+              color: Colors.white,
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                  "assets/icons/camera.svg",
+                ),
+              color: Colors.white,
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                  "assets/icons/shopping-cart.svg",
+                ),
+              color: Colors.white,
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                  "assets/icons/account.svg",
+                ),
+              color: Colors.white,
+            ),
+          ],
+        )
+        ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.home),
-            color: selectedIndex == 0 ? Colors.blue : Colors.grey,
-            onPressed: () => onTap(0),
-          ),
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            color: selectedIndex == 1 ? Colors.blue : Colors.grey,
-            onPressed: () => onTap(1),
-          ),
-          IconButton(
-            icon: const Icon(Icons.post_add),
-            color: selectedIndex == 2 ? Colors.blue : Colors.grey,
-            onPressed: () => onTap(2),
-          ),
-          IconButton(
-            icon: const Icon(Icons.monetization_on),
-            color: selectedIndex == 3 ? Colors.blue : Colors.grey,
-            onPressed: () => onTap(3),
-          ),
-          IconButton(
-            icon: const Icon(Icons.person),
-            color: selectedIndex == 4 ? Colors.blue : Colors.grey,
-            onPressed: () => onTap(4),
-          ),
-        ],
-      ),
-    );
+      );
   }
 }
