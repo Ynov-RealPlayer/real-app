@@ -16,9 +16,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(); // Clé pour valider le formulaire
 
-  final double ffem = 1.0;
-  final double fem = 1.0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,35 +24,31 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Form(
             key: _formKey,
             child: Container(
-              // connexionRPx (52:142)
+              alignment: Alignment.center,
               width: double.infinity,
-              height: 932 * fem,
+              height: 932,
               decoration: BoxDecoration(
                 color: Color(0xff1d2b34),
               ),
               child: Stack(
+                alignment: Alignment.center,
                 children: [
                   Positioned(
-                    // bouton
-                    left: 33 * fem,
-                    top: 230 * fem,
+                    top: 230,
                     child: Container(
-                      width: 319 * fem,
-                      height: 480 * fem,
+                      width: 319,
+                      height: 480,
                       child: Stack(
+                        alignment: Alignment.center,
                         children: [
                           Positioned(
-                            // rectangle4EsC (52:143)
-                            left: 0 * fem,
-                            top: 0 * fem,
                             child: Align(
                               child: SizedBox(
-                                width: 319 * fem,
-                                height: 469 * fem,
+                                width: 319,
+                                height: 469,
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(27 * fem),
+                                    borderRadius: BorderRadius.circular(27),
                                     color: Color(0xff1d2b34),
                                   ),
                                 ),
@@ -63,13 +56,11 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           Positioned(
-                            // Bouton de connexion
-                            left: 32 * fem,
-                            top: 400 * fem,
+                            top: 400,
                             child: Align(
                               child: SizedBox(
-                                width: 255 * fem,
-                                height: 52 * fem,
+                                width: 255,
+                                height: 52,
                                 child: MaterialButton(
                                   onPressed: () async {
                                     if (_emailController.text.isEmpty ||
@@ -94,7 +85,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     } else {
                                       if (_formKey.currentState!.validate()) {
                                         try {
-                                          final user = await AuthService.register(
+                                          final user =
+                                              await AuthService.register(
                                                   _pseudoController.text,
                                                   _emailController.text,
                                                   _passwordController.text,
@@ -122,16 +114,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                   child: Text(
                                     "VALIDER",
                                     style: GoogleFonts.unicaOne(
-                                      fontSize: 22 * ffem,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w400,
-                                      height: 1.1825 * ffem / fem,
                                       color: Color(0xffffffff),
                                     ),
                                   ),
                                   color: Color(0xff0272cd),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(10 * fem),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   elevation: 8,
                                 ),
@@ -143,27 +133,25 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   Positioned(
-                    // pseudo
-                    left: 53 * fem,
-                    top: 350 * fem,
+                    top: 350,
                     child: SizedBox(
-                      width: 255 * fem,
-                      height: 52 * fem,
+                      width: 255,
+                      height: 52,
                       child: Row(
                         children: [
                           Icon(
                             FontAwesomeIcons.user,
                             color: Color(0xff0272cd),
-                            size: 36 * fem,
+                            size: 36,
                           ),
-                          SizedBox(width: 10 * fem),
+                          SizedBox(width: 10),
                           Expanded(
                             child: TextField(
                               controller: _pseudoController,
                               decoration: InputDecoration(
                                 hintText: 'Pseudo',
                                 hintStyle: TextStyle(
-                                  fontSize: 18 * ffem,
+                                  fontSize: 18,
                                   color: Color(0x99ffffff),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
@@ -185,27 +173,25 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   Positioned(
-                    // emailfield
-                    left: 53 * fem,
-                    top: 410 * fem,
+                    top: 410,
                     child: SizedBox(
-                      width: 255 * fem,
-                      height: 52 * fem,
+                      width: 255,
+                      height: 52,
                       child: Row(
                         children: [
                           Icon(
                             FontAwesomeIcons.envelope,
                             color: Color(0xff0272cd),
-                            size: 36 * fem,
+                            size: 36,
                           ),
-                          SizedBox(width: 10 * fem),
+                          SizedBox(width: 10),
                           Expanded(
                             child: TextField(
                               controller: _emailController,
                               decoration: InputDecoration(
                                 hintText: 'Email',
                                 hintStyle: TextStyle(
-                                  fontSize: 18 * ffem,
+                                  fontSize: 18,
                                   color: Color(0x99ffffff),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
@@ -227,20 +213,18 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   Positioned(
-                    // passwordfield (52:185)
-                    left: 53 * fem,
-                    top: 470 * fem,
+                    top: 470,
                     child: SizedBox(
-                      width: 255 * fem,
-                      height: 52 * fem,
+                      width: 255,
+                      height: 52,
                       child: Row(
                         children: [
                           Icon(
                             FontAwesomeIcons.lock,
                             color: Color(0xff0272cd),
-                            size: 36 * fem,
+                            size: 36,
                           ),
-                          SizedBox(width: 10 * fem),
+                          SizedBox(width: 10),
                           Expanded(
                             child: TextField(
                               controller: _passwordController,
@@ -248,7 +232,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               decoration: InputDecoration(
                                 hintText: 'Mot de passe',
                                 hintStyle: TextStyle(
-                                  fontSize: 18 * ffem,
+                                  fontSize: 18,
                                   color: Color(0x99ffffff),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
@@ -270,20 +254,18 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   Positioned(
-                    // passwordfield (52:185)
-                    left: 53 * fem,
-                    top: 530 * fem,
+                    top: 530,
                     child: SizedBox(
-                      width: 255 * fem,
-                      height: 52 * fem,
+                      width: 255,
+                      height: 52,
                       child: Row(
                         children: [
                           Icon(
                             FontAwesomeIcons.lock,
                             color: Color(0xff0272cd),
-                            size: 36 * fem,
+                            size: 36,
                           ),
-                          SizedBox(width: 10 * fem),
+                          SizedBox(width: 10),
                           Expanded(
                             child: TextField(
                               controller: _password2Controller,
@@ -291,7 +273,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               decoration: InputDecoration(
                                 hintText: 'Vérification mot de passe',
                                 hintStyle: TextStyle(
-                                  fontSize: 18 * ffem,
+                                  fontSize: 18,
                                   color: Color(0x99ffffff),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
@@ -313,9 +295,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 700 * fem,
+                    top: 700,
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, '/LoginPage');
@@ -325,7 +305,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16 * ffem,
+                          fontSize: 16,
                         ),
                       ),
                     ),
@@ -335,12 +315,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     left: 95,
                     right: 100,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 200 * fem),
+                      padding: EdgeInsets.only(top: 200),
                       child: Text(
                         'INSCRIPTION',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 32 * ffem,
+                          fontSize: 32,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
