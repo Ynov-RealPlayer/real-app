@@ -21,14 +21,15 @@ class _LoginPageState extends State<LoginPage> {
           child: Form(
             key: _formKey,
             child: Container(
+              alignment: Alignment.center,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Color(0xff1d2b34),
               ),
               child: Stack(
+                alignment: Alignment.center,
                 children: [
                   Positioned(
-                    left: 33,
                     top: 100,
                     child: Container(
                       width: 319,
@@ -36,9 +37,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: Stack(
                         children: [
                           Positioned(
-                            left: 0,
-                            top: 0,
                             child: Align(
+                              alignment: Alignment.center,
                               child: SizedBox(
                                 width: 319,
                                 height: 469,
@@ -52,69 +52,74 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           Positioned(
-                            left: 32,
-                            top: 428,
+                            top: 420,
+                            left: 0,
+                            right: 0,
                             child: Align(
-                              child: SizedBox(
-                                width: 255,
-                                height: 52,
-                                child: MaterialButton(
-                                  onPressed: () async {
-                                    if (_emailController.text.isEmpty ||
-                                        _passwordController.text.isEmpty) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          title: Text('Erreur'),
-                                          content: Text(
-                                              'Il faut rentrer un email et un mot de passe'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text('OK'),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    } else {
-                                      if (_formKey.currentState!.validate()) {
-                                        try {
-                                          final user = await AuthService.login(
-                                              _emailController.text,
-                                              _passwordController.text);
-                                          print(user);
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
+                              alignment: Alignment.center,
+                              child: FractionallySizedBox(
+                                widthFactor: 0.8,
+                                child: SizedBox(
+                                  height: 52,
+                                  child: MaterialButton(
+                                    onPressed: () async {
+                                      if (_emailController.text.isEmpty ||
+                                          _passwordController.text.isEmpty) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text('Erreur'),
+                                            content: Text(
+                                                'Il faut rentrer un email et un mot de passe'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: Text('OK'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      } else {
+                                        if (_formKey.currentState!.validate()) {
+                                          try {
+                                            final user =
+                                                await AuthService.login(
+                                                    _emailController.text,
+                                                    _passwordController.text);
+                                            print(user);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                  content: Text(
+                                                      "Bravo, vous êtes connecté !")),
+                                            );
+                                          } catch (e) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
                                                 content: Text(
-                                                    "Bravo, vous êtes connecté !")),
-                                          );
-                                        } catch (e) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                  "Erreur de connexion, vérifiez vos identifiants"),
-                                            ),
-                                          );
+                                                    "Erreur de connexion, vérifiez vos identifiants"),
+                                              ),
+                                            );
+                                          }
                                         }
                                       }
-                                    }
-                                  },
-                                  child: Text(
-                                    'SE CONNECTER',
-                                    style: GoogleFonts.unicaOne(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xffffffff),
+                                    },
+                                    child: Text(
+                                      'SE CONNECTER',
+                                      style: GoogleFonts.unicaOne(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w400,
+                                        color: Color(0xffffffff),
+                                      ),
                                     ),
+                                    color: Color(0xff0272cd),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    elevation: 8,
                                   ),
-                                  color: Color(0xff0272cd),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  elevation: 8,
                                 ),
                               ),
                             ),
@@ -124,7 +129,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Positioned(
-                    left: 53,
                     top: 380,
                     child: SizedBox(
                       width: 255,
@@ -148,11 +152,11 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide:
-                                  BorderSide(color: Color(0xff0272cd)),
+                                      BorderSide(color: Color(0xff0272cd)),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide:
-                                  BorderSide(color: Color(0xff0272cd)),
+                                      BorderSide(color: Color(0xff0272cd)),
                                 ),
                               ),
                               style: TextStyle(
@@ -165,7 +169,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Positioned(
-                    left: 53,
                     top: 450,
                     child: SizedBox(
                       width: 255,
@@ -190,11 +193,11 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide:
-                                  BorderSide(color: Color(0xff0272cd)),
+                                      BorderSide(color: Color(0xff0272cd)),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide:
-                                  BorderSide(color: Color(0xff0272cd)),
+                                      BorderSide(color: Color(0xff0272cd)),
                                 ),
                               ),
                               style: TextStyle(
@@ -207,8 +210,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Positioned(
-                    left: 0,
-                    right: 0,
                     top: 600,
                     child: GestureDetector(
                       onTap: () {
@@ -226,8 +227,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Positioned(
                     top: 90,
-                    left: 95,
-                    right: 100,
                     child: Padding(
                       padding: EdgeInsets.only(top: 200),
                       child: Text(
