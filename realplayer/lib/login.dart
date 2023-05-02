@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'services/auth_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.center,
                 children: [
                   Positioned(
-                    top: 100,
+                    top: 180,
                     child: Container(
                       width: 319,
                       height: 480,
@@ -107,9 +109,9 @@ class _LoginPageState extends State<LoginPage> {
                                       }
                                     },
                                     child: Text(
-                                      'SE CONNECTER',
+                                      'se connecter',
                                       style: GoogleFonts.unicaOne(
-                                        fontSize: 22,
+                                        fontSize: 36,
                                         fontWeight: FontWeight.w400,
                                         color: Color(0xffffffff),
                                       ),
@@ -135,10 +137,8 @@ class _LoginPageState extends State<LoginPage> {
                       height: 52,
                       child: Row(
                         children: [
-                          Icon(
-                            FontAwesomeIcons.envelope,
-                            color: Color(0xff0272cd),
-                            size: 36,
+                          SvgPicture.asset(
+                            'assets/icons/mail.svg',
                           ),
                           SizedBox(width: 10),
                           Expanded(
@@ -146,20 +146,20 @@ class _LoginPageState extends State<LoginPage> {
                               controller: _emailController,
                               decoration: InputDecoration(
                                 hintText: 'Email',
-                                hintStyle: TextStyle(
+                                hintStyle: GoogleFonts.unicaOne(
                                   fontSize: 18,
                                   color: Color(0x99ffffff),
                                 ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xff0272cd)),
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xff0272cd), width: 3),
                                 ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xff0272cd)),
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xff0272cd), width: 3),
                                 ),
                               ),
-                              style: TextStyle(
+                              style: GoogleFonts.unicaOne(
                                 color: Colors.white,
                               ),
                             ),
@@ -175,10 +175,8 @@ class _LoginPageState extends State<LoginPage> {
                       height: 52,
                       child: Row(
                         children: [
-                          Icon(
-                            FontAwesomeIcons.lock,
-                            color: Color(0xff0272cd),
-                            size: 36,
+                          SvgPicture.asset(
+                            'assets/icons/password.svg',
                           ),
                           SizedBox(width: 10),
                           Expanded(
@@ -187,20 +185,20 @@ class _LoginPageState extends State<LoginPage> {
                               obscureText: true,
                               decoration: InputDecoration(
                                 hintText: 'Mot de passe',
-                                hintStyle: TextStyle(
+                                hintStyle: GoogleFonts.unicaOne(
                                   fontSize: 18,
                                   color: Color(0x99ffffff),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xff0272cd)),
+                                  borderSide: BorderSide(
+                                      color: Color(0xff0272cd), width: 3),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xff0272cd)),
+                                  borderSide: BorderSide(
+                                      color: Color(0xff0272cd), width: 3),
                                 ),
                               ),
-                              style: TextStyle(
+                              style: GoogleFonts.unicaOne(
                                 color: Colors.white,
                               ),
                             ),
@@ -210,33 +208,38 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Positioned(
-                    top: 600,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/RegisterPage');
-                      },
-                      child: Text(
-                        "Pas encore de compte ? Cliquez ici",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
+                    top: 670,
+                    child: RichText(
+                      text: TextSpan(
+                        text: "vous n'avez pas de compte ? ",
+                        style: GoogleFonts.unicaOne(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 16.0,
                         ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: "s'inscrire",
+                            style: GoogleFonts.unicaOne(
+                              color: Colors.blue,
+                              fontSize: 16.0,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushNamed(context, '/RegisterPage');
+                              },
+                          ),
+                        ],
                       ),
                     ),
                   ),
                   Positioned(
-                    top: 90,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 200),
-                      child: Text(
-                        'CONNEXION',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                    top: 200,
+                    child: Text(
+                      'CONNEXION',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.unicaOne(
+                        fontSize: 64,
+                        color: Colors.white,
                       ),
                     ),
                   ),
