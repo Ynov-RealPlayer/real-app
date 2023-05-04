@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   static const apiUrl = "https://realplayer.fr/api";
@@ -12,6 +13,8 @@ class AuthService {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
+      final String token = responseData['access_token'];
+      await setToken(token);
       return responseData;
     } else {
       throw Exception("Failed to login");
@@ -28,9 +31,26 @@ class AuthService {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
+      final String token = responseData['access_token'];
+      await setToken(token);
       return responseData;
     } else {
       throw Exception("Failed to register");
     }
+  }
+
+  static Future<void> setToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+  static Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+
+  static Future<void> removeToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
   }
 }

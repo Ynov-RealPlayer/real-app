@@ -311,6 +311,22 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   Positioned(
+                    top: 730,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/UploadPost');
+                      },
+                      child: Text(
+                        "Déjà un compte ? Cliquez ici",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
                     top: 10,
                     left: 95,
                     right: 100,
