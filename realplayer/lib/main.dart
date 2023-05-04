@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:realplayer/view/OnBoarding.view.dart';
 import 'register.dart';
 import 'login.dart';
+import 'upload_post.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const OnBoardingView(),
       routes: {
+        '/UploadPost': (context) => UploadPost(),
         '/RegisterPage': (context) => RegisterPage(),
         '/LoginPage': (context) => LoginPage(),
       },

@@ -85,17 +85,16 @@ class _LoginPageState extends State<LoginPage> {
                                       } else {
                                         if (_formKey.currentState!.validate()) {
                                           try {
-                                            final user =
-                                                await AuthService.login(
-                                                    _emailController.text,
-                                                    _passwordController.text);
-                                            print(user);
+                                            await AuthService.login(
+                                                _emailController.text,
+                                                _passwordController.text);
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
                                                   content: Text(
                                                       "Bravo, vous êtes connecté !")),
                                             );
+                                            print(await AuthService.getToken());
                                           } catch (e) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
