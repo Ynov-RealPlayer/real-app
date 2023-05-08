@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realplayer/services/auth_service.dart';
 import 'package:realplayer/themes/color.dart';
 import 'components/NavBar.View.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,50 +15,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Map<String, dynamic>> categoryIcons = [
-  {
-    "category": "Animaux",
-    "icon": Icons.pets,
-    "index": 0,
-  },
-  {
-    "category": "Voyages",
-    "icon": Icons.flight,
-    "index": 1,
-  },
-  {
-    "category": "Musique",
-    "icon": Icons.music_note,
-    "index": 2,
-  },
-  {
-    "category": "Sport",
-    "icon": Icons.sports_soccer,
-    "index": 3,
-  },
-  {
-    "category": "Cuisine",
-    "icon": Icons.restaurant,
-    "index": 4,
-  },
-  {
-    "category": "Mode",
-    "icon": Icons.shopping_bag,
-    "index": 5,
-  },
-  {
-    "category": "Technologie",
-    "icon": Icons.devices,
-    "index": 6,
-  },
-  {
-    "category": "Jeux",
-    "icon": Icons.games,
-    "index": 7,
-  },
-];
-
   int _currentSliderIndex = 0;
+  List<dynamic> _categories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    final token = await AuthService.getToken();
+    final url = Uri.parse('https://realplayer.fr/api/categories');
+    final response =
+        await http.get(url, headers: {'Authorization': 'Bearer $token'});
+    final categories = json.decode(response.body);
+    setState(() {
+      _categories = categories;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,8 +99,9 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(left: 10.0, right: 8.0, top: 15.0),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: categoryIcons.length,
+              itemCount: _categories.length,
               itemBuilder: (BuildContext context, int index) {
+                final category = _categories[index];
                 return GestureDetector(
                   onTap: () {
                     setState(() {
@@ -140,15 +119,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          categoryIcons[index]['icon'],
-                          color: _currentSliderIndex == index
-                              ? Colors.white
-                              : Colors.grey,
+                        Text(
+                          category['symbol'],
+                          style: TextStyle(fontSize: 22.0),
                         ),
                         const SizedBox(width: 8.0),
                         Text(
-                          categoryIcons[index]['category'],
+                          category['name'],
                           style: GoogleFonts.unicaOne(
                             color: _currentSliderIndex == index
                                 ? Colors.white
