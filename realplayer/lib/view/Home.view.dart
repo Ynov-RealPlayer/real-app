@@ -6,6 +6,7 @@ import 'package:realplayer/services/auth_service.dart';
 import 'package:realplayer/themes/color.dart';
 import 'components/NavBar.View.dart';
 import 'package:http/http.dart' as http;
+import 'package:realplayer/services/category_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,14 +26,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchCategories() async {
-    final token = await AuthService.getToken();
-    final url = Uri.parse('https://realplayer.fr/api/categories');
-    final response =
-        await http.get(url, headers: {'Authorization': 'Bearer $token'});
-    final categories = json.decode(response.body);
-    setState(() {
-      _categories = categories;
-    });
+    _categories = await CategoryService.fetchCategories();
+    setState(() {});
   }
 
   @override
