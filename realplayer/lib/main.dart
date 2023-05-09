@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:realplayer/view/OnBoarding.view.dart';
 import 'register.dart';
 import 'login.dart';
+import 'post.dart';
 import 'upload_post.dart';
 
 void main() {
@@ -20,7 +21,9 @@ class MyApp extends StatelessWidget {
         '/UploadPost': (context) => UploadPost(),
         '/RegisterPage': (context) => RegisterPage(),
         '/LoginPage': (context) => LoginPage(),
+        '/PostPage': (context) => PostPage(userId: 4, postId: 5),
       },
     );
   }
+
 }

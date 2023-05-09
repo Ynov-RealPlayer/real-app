@@ -199,7 +199,7 @@ class _UploadPostState extends State<UploadPost> {
                           name: _titreController.text,
                           description: _descriptionController.text,
                           mediaType: "SCREEN",
-                          url: "alors_les_gars_url",
+                          url: "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjdhZWY1ZWU0ZGFhMmQ2MmMzNzRjM2M5NTc0NWRmZjIzZWIzMGM4OSZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/Wvh1de6cFXcWc/giphy.gif",
                           duration: 0,
                           categoryId: 1,
                           userId: 1,
