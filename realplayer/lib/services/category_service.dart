@@ -9,7 +9,16 @@ class CategoryService {
     final token = await AuthService.getToken();
     final url = Uri.parse('$apiUrl/categories');
     final response = await http.get(url, headers: {'Authorization': 'Bearer $token'});
-    final categories = json.decode(response.body);
-    return categories;
+
+    if (response.statusCode == 200) {
+      final categories = json.decode(response.body);
+      if (categories is List<dynamic>) {
+        return categories;
+      } else {
+        throw FormatException('Invalid data format');
+      }
+    } else {
+      throw Exception('Failed to fetch categories');
+    }
   }
 }
