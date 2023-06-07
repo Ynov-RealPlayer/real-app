@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:realplayer/services/category_service.dart';
 import 'package:realplayer/services/media_service.dart';
 import 'package:realplayer/themes/color.dart';
-import 'package:realplayer/view/components/NavBar.View.dart';
 
 class appBarHome extends StatelessWidget implements PreferredSizeWidget {
   @override
