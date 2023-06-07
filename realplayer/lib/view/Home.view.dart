@@ -11,10 +11,9 @@ import 'package:realplayer/themes/color.dart';
 import 'package:realplayer/view/Boutique.View.dart';
 import 'package:realplayer/view/CoinShop.View.dart';
 import 'package:realplayer/view/Profile.View.dart';
-import 'components/NavBar.View.dart';
 import 'package:http/http.dart' as http;
 import 'package:realplayer/services/category_service.dart';
-import 'package:realplayer/view/AppBar.view.dart';
+import 'package:realplayer/view/components/AppBar.view.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -161,48 +160,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ],
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              height: 120,
-              color: ColorTheme.backgroundColor,
-              child: CustomNavigationBar(
-                isFloating: true,
-                borderRadius: Radius.circular(10),
-                selectedColor: Colors.white,
-                unSelectedColor: Colors.grey[600],
-                backgroundColor: ColorTheme.buttonColor,
-                scaleFactor: 0.1,
-                iconSize: 40,
-                currentIndex: _currentIndex,
-                onTap: (index) {
-                  setState(() {
-                    _currentIndex = index;
-                  });
-                },
-                items: [
-                  CustomNavigationBarItem(
-                    icon: SvgPicture.asset('assets/icons/home.svg'),
-                  ),
-                  CustomNavigationBarItem(
-                    icon: SvgPicture.asset('assets/icons/bitcoin.svg'),
-                  ),
-                  CustomNavigationBarItem(
-                    icon: SvgPicture.asset('assets/icons/camera.svg'),
-                  ),
-                  CustomNavigationBarItem(
-                    icon: SvgPicture.asset('assets/icons/account.svg'),
-                  ),
-                  CustomNavigationBarItem(
-                    icon: SvgPicture.asset('assets/icons/shopping-cart.svg'),
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),

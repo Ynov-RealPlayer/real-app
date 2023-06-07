@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:realplayer/navigator.dart';
 import 'package:realplayer/view/Home.view.dart';
 import 'package:realplayer/view/OnBoarding.view.dart';
 import 'register.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const MainNavigator(),
       routes: {
         '/UploadPost': (context) => UploadPost(),
         '/RegisterPage': (context) => RegisterPage(),
