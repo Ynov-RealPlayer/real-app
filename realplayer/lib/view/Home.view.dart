@@ -10,6 +10,7 @@ import 'package:realplayer/services/media_service.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:realplayer/view/Boutique.View.dart';
 import 'package:realplayer/view/CoinShop.View.dart';
+import 'package:realplayer/view/Media.view.dart';
 import 'package:realplayer/view/Profile.View.dart';
 import 'package:http/http.dart' as http;
 import 'package:realplayer/services/category_service.dart';
@@ -26,29 +27,43 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentSliderIndex = 0;
   List<dynamic> _categories = [];
-  late Future<Map<String, dynamic>> _data;
+  late Future<List<dynamic>> _data;
   int _currentIndex = 0;
+  int? _selectedCategoryId;
+  String? _selectedCategoryName;
+
+  Future<void> _fetchCategories() async {
+    _categories = await CategoryService.fetchCategories();
+    if (_categories.isNotEmpty) {
+      setState(() {
+        _data = fetchMediaCategData(_categories[_currentIndex]['id']);
+      });
+    }
+  }
+
+  Future<List<dynamic>> fetchMediaCategData(int categoryId) async {
+    try {
+      if (_categories.isNotEmpty) {
+        final mediaCategData =
+            await MediaService.getMediaByCategorie(categoryId);
+        final mediaList = mediaCategData;
+        return mediaList;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération du categmédia: $e');
+      return [];
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _fetchCategories();
-    _data = fetchMediaCategData();
-  }
-
-  Future<void> _fetchCategories() async {
-    _categories = await CategoryService.fetchCategories();
-    setState(() {});
-  }
-
-  Future<Map<String, dynamic>> fetchMediaCategData() async {
-    try {
-      final mediaCategData = await MediaService.getMediaByCategorie(2);
-      return mediaCategData;
-    } catch (e) {
-      print('Erreur lors de la récupération du categmédia: $e');
-      return {};
-    }
+    _data = _categories.isNotEmpty
+        ? fetchMediaCategData(_categories[_currentIndex]['id'])
+        : Future.value([]);
   }
 
   @override
@@ -70,11 +85,19 @@ class _HomePageState extends State<HomePage> {
                   itemCount: _categories.length,
                   itemBuilder: (BuildContext context, int index) {
                     final category = _categories[index];
+                    // print(category);
                     return GestureDetector(
                       onTap: () {
-                        setState(() {
-                          _currentSliderIndex = index;
-                        });
+                        if (_categories.isNotEmpty) {
+                          setState(() {
+                            _selectedCategoryId = category['id'];
+                            _selectedCategoryName = category['name'];
+                            _currentSliderIndex = index;
+                            _currentIndex = index;
+                            _data = fetchMediaCategData(
+                                _categories[_currentIndex]['id']);
+                          });
+                        }
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -87,6 +110,18 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: Row(
                           children: [
+                            IconButton(
+                              icon: Icon(Icons.info),
+                              onPressed: () {
+                                if (_selectedCategoryId != null &&
+                                    _selectedCategoryName != null) {
+                                  print(
+                                      'ID de la catégorie : $_selectedCategoryId');
+                                  print(
+                                      'Nom de la catégorie : $_selectedCategoryName');
+                                }
+                              },
+                            ),
                             Text(
                               category['symbol'],
                               style: TextStyle(fontSize: 25.0),
@@ -112,12 +147,12 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   color: ColorTheme.backgroundColor,
                   height: MediaQuery.of(context).size.height - 200,
-                  child: FutureBuilder<Map<String, dynamic>>(
+                  child: FutureBuilder<List<dynamic>>(
                     future: _data,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        final mediaCategData = snapshot.data!;
-                        final mediaList = mediaCategData['url'];
+                        final mediaList = snapshot.data!;
+                        // print(mediaList);
                         return GridView.builder(
                           itemCount: mediaList.length,
                           gridDelegate:
@@ -127,13 +162,35 @@ class _HomePageState extends State<HomePage> {
                             crossAxisSpacing: 10.0,
                           ),
                           itemBuilder: (context, index) {
-                            return Container(
-                              child: Image.network(
-                                mediaList,
-                                fit: BoxFit.cover,
-                                width: 100.0,
-                                height: 100.0,
-                                colorBlendMode: BlendMode.darken,
+                            final mediaItem = mediaList[index];
+                            final imageUrl = mediaItem['url'];
+                            // print(mediaItem);
+                            // print(imageUrl);
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MediaPage(
+                                      imageUrl: imageUrl,
+                                      username: 'JohnDoe',
+                                      likeCount: 42,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10.0,
+                                  vertical: 10.0,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             );
                           },

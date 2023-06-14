@@ -9,6 +9,7 @@ import 'package:realplayer/view/Boutique.View.dart';
 import 'package:realplayer/view/CoinShop.View.dart';
 import 'package:realplayer/view/Home.view.dart';
 import 'package:realplayer/view/Profile.View.dart';
+import 'package:badges/badges.dart' as badges;
 
 class MainNavigator extends StatefulWidget {
   const MainNavigator({super.key});
@@ -72,6 +73,18 @@ class _MainNavigatorState extends State<MainNavigator> {
                   _selectedIndex = i;
                 });
               },
+            ),
+          ),
+          const Positioned(
+            top:
+                21,
+            right:
+                105,
+            child: badges.Badge(
+              badgeContent: Text(
+                '3',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ],

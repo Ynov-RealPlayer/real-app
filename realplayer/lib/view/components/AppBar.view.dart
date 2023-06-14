@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:realplayer/services/category_service.dart';
 import 'package:realplayer/services/media_service.dart';
 import 'package:realplayer/themes/color.dart';
+import 'package:badges/badges.dart' as badges;
 
 class appBarHome extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -17,18 +18,34 @@ class appBarHome extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       actions: [
         IconButton(
+          iconSize: 35,
           onPressed: () {},
           icon: SvgPicture.asset(
             "assets/icons/rating.svg",
           ),
           color: Colors.white,
         ),
-        IconButton(
-          onPressed: () {},
-          icon: SvgPicture.asset(
-            "assets/icons/notif.svg",
-          ),
-          color: Colors.white,
+        Stack(
+          children: [
+            IconButton(
+              iconSize: 40,
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                "assets/icons/notif.svg",
+              ),
+              color: Colors.white,
+            ),
+            const Positioned(
+              top: 1,
+              left: 29,
+              child: badges.Badge(
+                badgeContent: Text(
+                  '3',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
       flexibleSpace: SafeArea(

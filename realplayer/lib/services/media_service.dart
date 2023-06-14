@@ -39,7 +39,7 @@ class MediaService {
     }
   }
 
-    static Future<Map<String, dynamic>> getMediaByCategorie(int CategorieId) async {
+  static Future<List<dynamic>> getMediaByCategorie(int CategorieId) async {
     final token = await AuthService.getToken();
     final response = await http.get(
       Uri.parse('$apiUrl/media/category/$CategorieId'),
@@ -48,10 +48,10 @@ class MediaService {
       },
     );
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
+      final List<dynamic> responseData = json.decode(response.body);
       return responseData;
     } else {
-      throw Exception("Failed to get media by categ");
+      throw Exception("Failed to get media by category");
     }
   }
 }
