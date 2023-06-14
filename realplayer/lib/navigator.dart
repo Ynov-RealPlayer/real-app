@@ -96,8 +96,35 @@ class _MainNavigatorState extends State<MainNavigator> {
                   ),
                 ),
               ],
+            onTap: (int index) {
+                      if (index == 4) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileView()),
+                        );
+                      } else {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      }
+                    },
+                  ),
+                ),
+                const Positioned(
+                  top: 21,
+                  right: 105,
+                  child: badges.Badge(
+                    badgeContent: Text(
+                      '3',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
             )
           : null, // Ne pas afficher la bottomNavigationBar sur la page de profil
     );
   }
 }
+
