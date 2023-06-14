@@ -27,7 +27,6 @@ class _ProfileViewState extends State<ProfileView> {
 
   Future<Map<String, dynamic>> _fetchUserData() async {
     final userData = await profileService.fetchUserData();
-    // print(userData['medias'][0]['name']);
     return userData;
   }
 
@@ -40,12 +39,19 @@ class _ProfileViewState extends State<ProfileView> {
           final userData = snapshot.data!;
           final String pseudo = userData['pseudo'];
           final String description = userData['description'];
-          print(description);
           final String picture = userData['picture'];
           final String banner = userData['banner'];
           final int experience = userData['experience'];
           final List<dynamic> medias = userData['medias'];
-          // print(medias);
+          final int mediaCount = medias.length;
+          int totalComments = 0;
+          int totalLikes = 0;
+          medias.forEach((media) {
+            totalComments += (media['nb_comments'] as num).toInt();
+          });
+          medias.forEach((media) {
+            totalLikes += (media['nb_likes'] as num).toInt();
+          });
           return Scaffold(
             backgroundColor: ColorTheme.backgroundColor,
             body: Stack(
@@ -244,7 +250,7 @@ class _ProfileViewState extends State<ProfileView> {
                         //  medias.map((media) {
                         children: [
                           Text(
-                            "123",
+                            mediaCount.toString(),
                             style: GoogleFonts.unicaOne(
                               fontSize: 24.0,
                               color: Colors.white,
@@ -252,7 +258,7 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                           SizedBox(height: 5.0),
                           Text(
-                            "Following",
+                            "Medias",
                             style: GoogleFonts.unicaOne(
                               fontSize: 20.0,
                               color: Colors.white,
@@ -263,7 +269,7 @@ class _ProfileViewState extends State<ProfileView> {
                       Column(
                         children: [
                           Text(
-                            "1OM",
+                            "$totalComments",
                             style: GoogleFonts.unicaOne(
                               fontSize: 24.0,
                               color: Colors.white,
@@ -271,7 +277,7 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                           SizedBox(height: 5.0),
                           Text(
-                            "likes",
+                            "Comments",
                             style: GoogleFonts.unicaOne(
                               fontSize: 20.0,
                               color: Colors.white,
@@ -282,7 +288,7 @@ class _ProfileViewState extends State<ProfileView> {
                       Column(
                         children: [
                           Text(
-                            "145",
+                            "$totalLikes",
                             style: GoogleFonts.unicaOne(
                               fontSize: 24.0,
                               color: Colors.white,
@@ -290,7 +296,7 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                           SizedBox(height: 5.0),
                           Text(
-                            "Videos",
+                            "Likes",
                             style: GoogleFonts.unicaOne(
                               fontSize: 20.0,
                               color: Colors.white,

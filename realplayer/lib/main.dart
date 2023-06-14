@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: const MainNavigator(),
-      home: const ProfileView(),
+      home: ProfileView(),
       // home: LoginPage(),
       routes: {
         '/UploadPost': (context) => UploadPost(),
