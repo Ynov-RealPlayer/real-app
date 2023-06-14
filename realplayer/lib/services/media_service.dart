@@ -41,45 +41,7 @@ class MediaService {
     }
   }
 
-  static Future<Map<String, dynamic>> getMedia(int mediaId) async {
-    final token = await AuthService.getToken();
-    final response = await http.get(
-      Uri.parse('$apiUrl/media/$mediaId'),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
-    if (response.statusCode == 200) {
-      final List<dynamic> responseData = json.decode(response.body);
-      return responseData;
-    } else {
-      throw Exception("Failed to get media");
-    }
-  }
-
-  static Future<Map<String, dynamic>> likeMedia(int mediaId, String type) async {
-    //type = Media or Commentary
-    final token = await AuthService.getToken();
-    final response = await http.post(
-      Uri.parse('$apiUrl/likes'),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-      body: {
-        "likeable_type": "App\\Models\\$type",
-        "likeable_id": mediaId.toString(),
-      },
-    );
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      print(responseData);
-      return responseData;
-    } else {
-      throw Exception("Failed to like media");
-    }
-  }
-
-  static Future<List<dynamic>> getCommentaries(int mediaId) async {
+  static Future<List<dynamic>> getMediaByCategorie(int CategorieId) async {
     final token = await AuthService.getToken();
     final response = await http.get(
       Uri.parse('$apiUrl/media/category/$CategorieId'),
@@ -113,10 +75,10 @@ class MediaService {
       },
     );
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
+      final List<dynamic> responseData = json.decode(response.body);
       return responseData;
     } else {
-      throw Exception("Failed to post commentary");
+      throw Exception("Failed to get media by category");
     }
   }
 }
