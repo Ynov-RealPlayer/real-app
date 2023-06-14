@@ -194,7 +194,6 @@ class _UploadPostState extends State<UploadPost> {
                   child: ElevatedButton.icon(
                     onPressed: () async {
                       try {
-                        final token = await AuthService.getToken();
                         final response = await MediaService.postMedia(
                           name: _titreController.text,
                           description: _descriptionController.text,
@@ -203,7 +202,6 @@ class _UploadPostState extends State<UploadPost> {
                           duration: 0,
                           categoryId: 1,
                           userId: 1,
-                          token: token!,
                         );
                         print("Réponse de l'API: $response");
                       } catch (e) {

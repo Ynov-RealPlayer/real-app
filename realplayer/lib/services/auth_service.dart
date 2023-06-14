@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,9 +45,10 @@ class AuthService {
     await prefs.setString('token', token);
   }
 
-  static Future<String?> getToken() async {
+  static Future<String> getToken() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
+    final token = prefs.getString('token');
+    return token ?? '';
   }
 
   static Future<void> removeToken() async {

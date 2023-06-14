@@ -1,129 +1,402 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
-
+import './services/media_service.dart';
+import './services/auth_service.dart';
+import './services/user_service.dart';
 
 void main() {
-  runApp(MaterialApp(home: PostPage(userId: 1, postId: 1)));
+  runApp(MaterialApp(home: PostPage(postId: 3)));
 }
 
-class PostPage extends StatelessWidget {
-  final int userId;
+class PostPage extends StatefulWidget {
   final int postId;
+
   // Constructeur
-  PostPage({required this.userId, required this.postId});
+  PostPage({required this.postId});
+
+  @override
+  _PostPageState createState() => _PostPageState();
+}
+
+class _PostPageState extends State<PostPage> {
+  late Future<Map<String, dynamic>> _mediaData;
+  late Future<List<dynamic>?> _commentariesData;
+  bool _showCommentaries = false;
+  TextEditingController _commentController = TextEditingController();
+
+  late int _likes;
+  late bool _hasLiked;
+
+  Map<int, int> _comLikes = Map<int, int>();
+  Map<int, bool> _comHasLiked = Map<int, bool>();
+
+  @override
+  void initState() {
+    super.initState();
+    _mediaData = fetchMediaData();
+    _commentariesData = getCommentariesData();
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
+  Future<Map<String, dynamic>> fetchMediaData() async {
+    try {
+      final mediaData = await MediaService.getMedia(widget.postId);
+      _likes = mediaData['nb_likes'] ?? 0;
+      _hasLiked = mediaData['has_liked'] ?? false;
+      return mediaData;
+    } catch (e) {
+      log('Erreur lors de la récupération du média: $e');
+      return {}; // Retourne une valeur vide en cas d'erreur
+    }
+  }
+
+  Future<List<dynamic>?> getCommentariesData() async {
+    try {
+      final commentariesData =
+      await MediaService.getCommentaries(widget.postId);
+      for (var comment in commentariesData) {
+        _comLikes[comment['id']] = comment['nb_likes'] ?? 0;
+        _comHasLiked[comment['id']] = comment['has_liked'] ?? false;
+      }
+      return commentariesData;
+    } catch (e) {
+      log('Erreur lors de la récupération des commentaires : $e');
+      return null; // Retourne null en cas d'erreur
+    }
+  }
+
+  Future<void> refreshCommentaries() async {
+    try {
+      final commentariesData =
+      await MediaService.getCommentaries(widget.postId);
+      for (var comment in commentariesData) {
+        _comLikes[comment['id']] = comment['nb_likes'] ?? 0;
+        _comHasLiked[comment['id']] = comment['has_liked'] ?? false;
+      }
+      setState(() {
+        _commentariesData = Future.value(commentariesData);
+      });
+    } catch (e) {
+      log('Erreur lors de la récupération des commentaires : $e');
+      setState(() {
+        _commentariesData = Future.value(null);
+      });
+    }
+  }
+
+  Future<dynamic> fetchUserData(int userID) async {
+    try {
+      UserService userService = UserService();
+      final userData = await userService.getUser(userID); // Remplacez 1 par l'ID de l'utilisateur souhaité
+      final String profilePhotoUrl = userData['picture'];
+      return profilePhotoUrl;
+    } catch (e) {
+      log('Erreur lors de la récupération des données de l\'utilisateur: $e');
+      return null; // Retourne null en cas d'erreur
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xff1d2b34),
-      body: Stack(
-        children: [
-          Image.network(
-            'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjdhZWY1ZWU0ZGFhMmQ2MmMzNzRjM2M5NTc0NWRmZjIzZWIzMGM4OSZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/Wvh1de6cFXcWc/giphy.gif',
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 40.0, left: 8, right: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: AssetImage('./assets/images/shrek.jpg'),
-                          radius: 18,
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          'QuentinLeMalin',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.favorite, color: Colors.red),
-                        SizedBox(width: 5),
-                        Text('123', style: TextStyle(color: Colors.white)),
-                        SizedBox(width: 16),
-                      ],
-                    ),
-                  ],
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: _mediaData,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Affiche un indicateur de chargement si les données sont en cours de chargement
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+                child: Text('Erreur lors de la récupération des données'));
+          } else {
+            final mediaData = snapshot.data ?? {};
+
+            final String name = mediaData['name'] ?? '';
+            final String description = mediaData['description'] ?? '';
+            final int user_id = mediaData['user_id'] ?? 0;
+            final String url = mediaData['url'] ??
+                "https://www.journee-mondiale.com//medias/grande/images/journee/rien-du-tout.jpg";
+            final String profilePhotoUrl = mediaData['user']['picture'] ??
+                "https://www.journee-mondiale.com//medias/grande/images/journee/rien-du-tout.jpg";
+            final int likes = mediaData['nb_likes'] ?? 0;
+            final bool hasLiked = mediaData['has_liked'] ?? false;
+
+            return Stack(
+              children: [
+                Image.network(
+                  url,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
                 ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // Ici, vous pouvez ajouter le contenu du post.
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(8),
-                child: Row(
+                Column(
                   children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Votre commentaire...',
-                          hintStyle: TextStyle(color: Color(0x99ffffff)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
+                    Padding(
+                      padding:
+                      const EdgeInsets.only(top: 40.0, left: 8, right: 8),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.arrow_back, color: Colors.white),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xff0272cd)),
-                            borderRadius: BorderRadius.circular(12),
+                          Expanded(
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(profilePhotoUrl),
+                              radius: 20,
+                            ),
                           ),
-                        ),
-                        style: TextStyle(color: Colors.white),
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.favorite,
+                                  color: _hasLiked ? Colors.red : Colors.white,
+                                ),
+                                onPressed: () async {
+                                  try {
+                                    final response = await MediaService.likeMedia(widget.postId, 'Media');
+                                    log(response.toString()); // Log entire response
+                                    if (response["message"] == "success") {
+                                      setState(() {
+                                        if (response['like'] == "created") {
+                                          _hasLiked = true;
+                                          _likes++;
+                                        } else {
+                                          _hasLiked = false;
+                                          _likes--;
+                                        }
+                                      });
+                                    }
+                                  } catch (e) {
+                                    print('Erreur lors de l\'ajout du j\'aime : $e');
+                                    // Gérez l'erreur si nécessaire
+                                  }
+                                },
+                              ),
+                              Text(
+                                '$_likes',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    IconButton(
-                      iconSize: 32,
-                      icon: Icon(Icons.send, color: Color(0xff0272cd)),
-                      onPressed: () {
-                        print("envoyer un commentaire ici");
-                      },
+                    Expanded(
+                      child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Text(name, style: TextStyle(color: Colors.white)),
+                              Text(description,
+                                  style: TextStyle(color: Colors.white)),
+                            ],
+                          )),
                     ),
+                    _buildCommentInput(),
                   ],
                 ),
-              ),
-              SizedBox(height: 8),
-            ],
-          ),
-          Positioned(
-            bottom: 80,
-            right: 8,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.favorite, color: Colors.red),
-                  iconSize: 30,
-                  onPressed: () {
-                    print("like du post ici");
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.comment, color: Color(0xff0272cd)),
-                  iconSize: 30,
-                  onPressed: () {
-                    print(postId);
-                  },
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    height: _showCommentaries
+                        ? MediaQuery.of(context).size.height * 0.6
+                        : 0,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF0272CD),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: _buildCommentariesList(),
+                      ),
+                    ),
+                  ),
                 ),
               ],
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  List<Widget> _buildCommentariesList() {
+    return [
+      IconButton(
+        icon: Icon(Icons.close, color: Colors.white),
+        onPressed: () {
+          setState(() {
+            _showCommentaries = false;
+          });
+        },
+      ),
+      FutureBuilder<List<dynamic>?>(
+        future: _commentariesData,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text(
+              'Erreur lors de la récupération des commentaires',
+              style: TextStyle(color: Colors.white),
+            );
+          } else {
+            final commentariesData = snapshot.data;
+            if (commentariesData == null || commentariesData.isEmpty) {
+              return Text(
+                'Aucun commentaire',
+                style: TextStyle(color: Colors.white),
+              );
+            } else {
+              return _buildCommentaries(commentariesData);
+            }
+          }
+        },
+      ),
+    ];
+  }
+
+  Widget _buildCommentaries(List<dynamic> commentaries) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: commentaries.length,
+      itemBuilder: (context, index) {
+        final commentary = commentaries[index];
+        final String comProfilePhotoUrl = commentary["user"]["picture"];
+        final String username = commentary['username'] ?? '';
+        final int user_id = commentary['user_id'] ?? 0;
+        final String content = commentary['content'] ?? '';
+        //log(commentaries.toString());
+        final int comLikes = _comLikes[commentary['id']] ?? (commentary['nb_likes'] ?? 0);
+        final bool comHasLiked = _comHasLiked[commentary['id']] ?? (commentary['has_liked'] ?? false);
+
+        return ListTile(
+          leading: FutureBuilder<dynamic>(
+            future: fetchUserData(user_id),
+            builder: (context, snapshot) {
+              if (comProfilePhotoUrl.isEmpty) {
+                return CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/logo-real.png'),
+                );
+              } else {
+                return CircleAvatar(
+                  backgroundImage: NetworkImage(comProfilePhotoUrl),
+                );
+              }
+            },
+          ),
+          title: Text(
+            username,
+            style: TextStyle(color: Colors.white),
+          ),
+          subtitle: Text(
+            content,
+            style: TextStyle(color: Colors.white),
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.favorite,
+                  color: comHasLiked ? Colors.red : Colors.white,
+                ),
+                onPressed: () async {
+                  try {
+                    final response = await MediaService.likeMedia(commentary['id'], 'Commentary');
+                    log(response.toString()); // Log entire response
+                    if (response["message"] == "success") {
+                      setState(() {
+                        if (response['like'] == "created") {
+                          _comHasLiked[commentary['id']] = true;
+                          _comLikes[commentary['id']] = (comLikes + 1);
+                        } else {
+                          _comHasLiked[commentary['id']] = false;
+                          _comLikes[commentary['id']] = (comLikes - 1);
+                        }
+                      });
+                    }
+                  } catch (e) {
+                    print('Erreur lors de l\'ajout du j\'aime : $e');
+                    // Gérez l'erreur si nécessaire
+                  }
+                },
+              ),
+              Text(
+                comLikes.toString(),
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildCommentInput() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _commentController,
+              decoration: InputDecoration(
+                hintText: 'Votre commentaire...',
+                hintStyle: TextStyle(color: Color(0x99ffffff)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xff0272cd)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              style: TextStyle(color: Colors.white),
             ),
+          ),
+          IconButton(
+            icon: Icon(Icons.send, color: Color(0xff0272cd)),
+            onPressed: () async {
+              final comment = _commentController.text;
+              if (comment.isNotEmpty) {
+                try {
+                  await MediaService.postCommentary(
+                    content: comment,
+                    mediaId: widget.postId,
+                  );
+                  _commentController.clear();
+                  refreshCommentaries(); // Appeler la fonction pour récupérer les commentaires mis à jour
+                } catch (e) {
+                  print('Erreur lors de la publication du commentaire : $e');
+                }
+              }
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.comment, color: Colors.white),
+            onPressed: () {
+              setState(() {
+                _showCommentaries = !_showCommentaries;
+              });
+            },
           ),
         ],
       ),

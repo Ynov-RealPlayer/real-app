@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -84,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                                         );
                                       } else {
                                         if (_formKey.currentState!.validate()) {
+
                                           try {
                                             await AuthService.login(
                                                 _emailController.text,

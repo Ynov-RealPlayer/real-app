@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         '/UploadPost': (context) => UploadPost(),
         '/RegisterPage': (context) => RegisterPage(),
         '/LoginPage': (context) => LoginPage(),
-        '/PostPage': (context) => PostPage(userId: 4, postId: 5),
+        '/PostPage': (context) => PostPage(postId: 22),
       },
     );
   }
