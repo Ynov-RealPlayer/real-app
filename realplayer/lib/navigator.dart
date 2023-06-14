@@ -21,74 +21,83 @@ class MainNavigator extends StatefulWidget {
 class _MainNavigatorState extends State<MainNavigator> {
   int _selectedIndex = 0;
 
-  List<Widget> _screens = [
+  final List<Widget> routes = [
     HomePage(),
     CoinShopView(),
     UploadPost(),
     BoutiqueView(),
-    ProfileView(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(height: 120, color: ColorTheme.backgroundColor),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: CustomNavigationBar(
-              isFloating: true,
-              borderRadius: Radius.circular(10),
-              selectedColor: Colors.white,
-              unSelectedColor: Colors.grey[600],
-              backgroundColor: ColorTheme.buttonColor,
-              scaleFactor: 0.1,
-              iconSize: 40,
-              items: [
-                CustomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/home.svg'),
+      body: routes[_selectedIndex],
+      bottomNavigationBar: _selectedIndex != 4
+          ? Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child:
+                      Container(height: 120, color: ColorTheme.backgroundColor),
                 ),
-                CustomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/bitcoin.svg'),
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: CustomNavigationBar(
+                    isFloating: true,
+                    borderRadius: Radius.circular(10),
+                    selectedColor: Colors.white,
+                    unSelectedColor: Colors.grey[600],
+                    backgroundColor: ColorTheme.buttonColor,
+                    scaleFactor: 0.1,
+                    iconSize: 40,
+                    items: [
+                      CustomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/icons/home.svg'),
+                      ),
+                      CustomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/icons/bitcoin.svg'),
+                      ),
+                      CustomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/icons/camera.svg'),
+                      ),
+                      CustomNavigationBarItem(
+                        icon:
+                            SvgPicture.asset('assets/icons/shopping-cart.svg'),
+                      ),
+                      CustomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/icons/account.svg'),
+                      ),
+                    ],
+                    onTap: (int index) {
+                      if (index == 4) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileView()),
+                        );
+                      } else {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      }
+                    },
+                  ),
                 ),
-                CustomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/camera.svg'),
-                ),
-                CustomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/shopping-cart.svg'),
-                ),
-                CustomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/account.svg'),
+                const Positioned(
+                  top: 21,
+                  right: 105,
+                  child: badges.Badge(
+                    badgeContent: Text(
+                      '3',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
               ],
-              onTap: (i) {
-                setState(() {
-                  _selectedIndex = i;
-                });
-              },
-            ),
-          ),
-          const Positioned(
-            top:
-                21,
-            right:
-                105,
-            child: badges.Badge(
-              badgeContent: Text(
-                '3',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-        ],
-      ),
+            )
+          : null, // Ne pas afficher la bottomNavigationBar sur la page de profil
     );
   }
 }
