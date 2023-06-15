@@ -6,19 +6,24 @@ import 'package:realplayer/view/Profile.View.dart';
 import 'package:realplayer/view/login.View.dart';
 import 'view/Register.view.dart';
 import 'view/UploadPost.view.dart';
+import 'services/auth_service.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final isLoggedIn = await AuthService.isLoggedIn(); // Vérifiez si l'utilisateur est déjà connecté
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+
+  MyApp({required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const OnBoardingView(),
+      home: isLoggedIn ? const MainNavigator() : const OnBoardingView(),
       routes: {
         '/UploadPost': (context) => UploadPost(),
         '/RegisterPage': (context) => RegisterPage(),
@@ -29,5 +34,4 @@ class MyApp extends StatelessWidget {
       },
     );
   }
-
 }

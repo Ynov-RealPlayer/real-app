@@ -55,4 +55,10 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
   }
+
+  static Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    return token != null && token.isNotEmpty;
+  }
 }
