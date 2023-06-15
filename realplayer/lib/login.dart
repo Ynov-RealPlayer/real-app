@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'services/auth_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'navigator.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -16,6 +17,10 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void _navigateToHome() {
+    Navigator.pushNamed(context, '/MainNavigator');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 52,
                                   child: MaterialButton(
                                     onPressed: () async {
+                                      _navigateToHome();
                                       if (_emailController.text.isEmpty ||
                                           _passwordController.text.isEmpty) {
                                         showDialog(

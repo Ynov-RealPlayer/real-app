@@ -19,14 +19,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: const MainNavigator(),
-      home: ProfileView(),
-      // home: LoginPage(),
+      home: const OnBoardingView(),
       routes: {
         '/UploadPost': (context) => UploadPost(),
         '/RegisterPage': (context) => RegisterPage(),
         '/LoginPage': (context) => LoginPage(),
-        '/PostPage': (context) => PostPage(postId: 22),
+        '/HomePage': (context) => const HomePage(),
+        '/ProfilePage': (context) => ProfileView(),
+        '/MainNavigator': (context) => const MainNavigator(),
       },
     );
   }

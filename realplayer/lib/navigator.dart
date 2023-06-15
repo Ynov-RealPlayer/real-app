@@ -39,8 +39,10 @@ class _MainNavigatorState extends State<MainNavigator> {
                   top: 0,
                   left: 0,
                   right: 0,
-                  child:
-                      Container(height: 120, color: ColorTheme.backgroundColor),
+                  child: Container(
+                    height: 120,
+                    color: ColorTheme.backgroundColor,
+                  ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 20),
@@ -85,7 +87,7 @@ class _MainNavigatorState extends State<MainNavigator> {
                     },
                   ),
                 ),
-                const Positioned(
+                Positioned(
                   top: 21,
                   right: 105,
                   child: badges.Badge(

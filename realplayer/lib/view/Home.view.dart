@@ -110,18 +110,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: Row(
                           children: [
-                            IconButton(
-                              icon: Icon(Icons.info),
-                              onPressed: () {
-                                if (_selectedCategoryId != null &&
-                                    _selectedCategoryName != null) {
-                                  print(
-                                      'ID de la catégorie : $_selectedCategoryId');
-                                  print(
-                                      'Nom de la catégorie : $_selectedCategoryName');
-                                }
-                              },
-                            ),
                             Text(
                               category['symbol'],
                               style: TextStyle(fontSize: 25.0),
