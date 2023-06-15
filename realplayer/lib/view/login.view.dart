@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'services/auth_service.dart';
+import '../services/auth_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'navigator.dart';
+import '../navigator.dart';
 
 class LoginPage extends StatefulWidget {
   @override

@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:realplayer/themes/color.dart';
-import 'package:realplayer/upload_post.dart';
+import 'package:realplayer/view/UploadPost.view.dart';
 import 'package:realplayer/view/Boutique.View.dart';
 import 'package:realplayer/view/CoinShop.View.dart';
 import 'package:realplayer/view/Home.view.dart';

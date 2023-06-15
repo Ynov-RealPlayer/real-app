@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realplayer/themes/color.dart';
-import './services/media_service.dart';
-import './services/auth_service.dart';
+import '../services/media_service.dart';
+import '../services/auth_service.dart';
 
 void main() {
   runApp(MaterialApp(home: UploadPost()));

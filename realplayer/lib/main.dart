@@ -3,10 +3,9 @@ import 'package:realplayer/navigator.dart';
 import 'package:realplayer/view/Home.view.dart';
 import 'package:realplayer/view/OnBoarding.view.dart';
 import 'package:realplayer/view/Profile.View.dart';
-import 'register.dart';
-import 'login.dart';
-import 'post.dart';
-import 'upload_post.dart';
+import 'package:realplayer/view/login.View.dart';
+import 'view/Register.view.dart';
+import 'view/UploadPost.view.dart';
 
 void main() {
   runApp(const MyApp());

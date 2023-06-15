@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:realplayer/login.dart';
+import 'package:realplayer/view/login.view.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realplayer/themes/string.dart';

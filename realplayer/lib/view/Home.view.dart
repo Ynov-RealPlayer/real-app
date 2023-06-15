@@ -160,9 +160,7 @@ class _HomePageState extends State<HomePage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => MediaPage(
-                                      imageUrl: imageUrl,
-                                      username: 'JohnDoe',
-                                      likeCount: 42,
+                                      postId: mediaItem['id'],
                                     ),
                                   ),
                                 );
