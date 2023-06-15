@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realplayer/themes/color.dart';
 import './services/media_service.dart';
 import './services/auth_service.dart';
 
@@ -25,10 +26,20 @@ class _UploadPostState extends State<UploadPost> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Choisir une source'),
+          title: Text(
+            'Choisir une source',
+            style: GoogleFonts.unicaOne(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
           actions: [
             TextButton(
-              child: Text('Caméra'),
+              child: Text('Caméra',
+                  style: GoogleFonts.unicaOne(
+                    fontSize: 20,
+                    color: Colors.white,
+                  )),
               onPressed: () {
                 Navigator.pop(context);
                 _picker.getImage(source: ImageSource.camera).then((pickedFile) {
@@ -43,7 +54,11 @@ class _UploadPostState extends State<UploadPost> {
               },
             ),
             TextButton(
-              child: Text('Galerie'),
+              child: Text('Galerie',
+                  style: GoogleFonts.unicaOne(
+                    fontSize: 20,
+                    color: Colors.white,
+                  )),
               onPressed: () {
                 Navigator.pop(context);
                 _picker
@@ -80,14 +95,13 @@ class _UploadPostState extends State<UploadPost> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 100),
+                SizedBox(height: 50),
                 Center(
                   child: Text(
                     'Nouveau Post',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                    style: GoogleFonts.unicaOne(
+                      fontSize: 50,
                       color: Colors.white,
                     ),
                   ),
@@ -105,7 +119,7 @@ class _UploadPostState extends State<UploadPost> {
                           Container(
                             width: 150,
                             height: 150,
-                            color: Colors.blue,
+                            color: ColorTheme.buttonColor,
                           ),
                           Center(
                             child: GestureDetector(
@@ -133,7 +147,7 @@ class _UploadPostState extends State<UploadPost> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Titre du post:',
-                    style: TextStyle(
+                    style: GoogleFonts.unicaOne(
                       fontSize: 18,
                       color: Colors.white,
                     ),
@@ -154,7 +168,7 @@ class _UploadPostState extends State<UploadPost> {
                       borderSide: BorderSide(color: Color(0xff0272cd)),
                     ),
                   ),
-                  style: TextStyle(
+                  style: GoogleFonts.unicaOne(
                     color: Colors.white,
                   ),
                 ),
@@ -163,7 +177,7 @@ class _UploadPostState extends State<UploadPost> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Description:',
-                    style: TextStyle(
+                    style: GoogleFonts.unicaOne(
                       fontSize: 18,
                       color: Colors.white,
                     ),
@@ -184,7 +198,7 @@ class _UploadPostState extends State<UploadPost> {
                       borderSide: BorderSide(color: Color(0xff0272cd)),
                     ),
                   ),
-                  style: TextStyle(
+                  style: GoogleFonts.unicaOne(
                     color: Colors.white,
                   ),
                   maxLines: 2,
@@ -198,7 +212,8 @@ class _UploadPostState extends State<UploadPost> {
                           name: _titreController.text,
                           description: _descriptionController.text,
                           mediaType: "SCREEN",
-                          url: "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjdhZWY1ZWU0ZGFhMmQ2MmMzNzRjM2M5NTc0NWRmZjIzZWIzMGM4OSZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/Wvh1de6cFXcWc/giphy.gif",
+                          url:
+                              "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjdhZWY1ZWU0ZGFhMmQ2MmMzNzRjM2M5NTc0NWRmZjIzZWIzMGM4OSZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/Wvh1de6cFXcWc/giphy.gif",
                           duration: 0,
                           categoryId: 1,
                           userId: 1,
