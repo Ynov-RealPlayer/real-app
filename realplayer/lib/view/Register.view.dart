@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'services/auth_service.dart';
+import '../services/auth_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -309,38 +309,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               },
                           ),
                         ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 780,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/UploadPost');
-                      },
-                      child: Text(
-                        "-> création post",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 750,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/PostPage');
-                      },
-                      child: Text(
-                        "-> post",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
                       ),
                     ),
                   ),
