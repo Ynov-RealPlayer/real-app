@@ -56,9 +56,25 @@ class AuthService {
     await prefs.remove('token');
   }
 
+  //verify token
+  static Future<bool> verifyToken() async {
+    final token = await AuthService.getToken();
+    final response = await http.post(
+      Uri.parse('$apiUrl/me'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return true;
+    }
+  }
+
   static Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    return token != null && token.isNotEmpty;
+    return token != null && token.isNotEmpty && await verifyToken();
   }
 }
