@@ -3,7 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realplayer/services/profile_service.dart';
 import 'package:realplayer/themes/color.dart';
-import 'package:realplayer/view/ProfileEdit.View.dart';
+import 'package:realplayer/view/Home.view.dart';
+import 'package:realplayer/view/ProfileEdit.view.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
 
 class ProfileView extends StatefulWidget {
@@ -36,7 +37,7 @@ class _ProfileViewState extends State<ProfileView> {
         if (snapshot.hasData && snapshot.data != null) {
           final userData = snapshot.data!;
           final String pseudo = userData['pseudo'];
-          final description = userData['description'];
+          final String description = userData['description'];
           final String picture = userData['picture'];
           final String banner = userData['banner'];
           final int experience = userData['experience'];
@@ -78,7 +79,12 @@ class _ProfileViewState extends State<ProfileView> {
                             "assets/icons/arrow_back.svg",
                           ),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
                           },
                         ),
                       ),
@@ -92,29 +98,12 @@ class _ProfileViewState extends State<ProfileView> {
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.mode_edit,
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileEdit(
-                                  userData: _userData,
-                                  onSave: (updatedData) {
-                                    // Effectuer la sauvegarde des données
-                                    // Par exemple, appeler une méthode du service ProfileService
-                                    profileService.saveUserData(1, updatedData);
-                                    // Actualiser la page ProfileView pour afficher les nouvelles données
-                                    setState(() {
-                                      _userData =
-                                          profileService.fetchUserData();
-                                    });
-                                  },
-                                ),
-                              ),
-                            );
+                            Navigator.pushNamed(context, '/ProfileEdit');
                           },
                         ),
                       ),
