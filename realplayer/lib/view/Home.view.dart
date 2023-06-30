@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:core';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -172,8 +173,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  child: Image.network(
-                                    imageUrl,
+                                  child: CachedNetworkImage(
+                                    imageUrl: imageUrl,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
