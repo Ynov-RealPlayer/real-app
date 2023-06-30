@@ -97,8 +97,23 @@ class _UploadPostState extends State<UploadPost> {
           categoryID: _categoryIDController.text,
           media: _image!,
         );
+        if (postCreated) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(
+            SnackBar(
+                content: Text(
+                    "Votre post a bien été créé")),
+          );
+          Navigator.pushNamed(context, '/HomePage');
+        } else {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(
+            SnackBar(
+                content: Text(
+                    "Une erreur est survenue. Veuillez réessayer.")),
+          );
+        }
       } catch (e) {
-        print('An error occurred. Please try again.');
         print(e);
       }
     } else {
