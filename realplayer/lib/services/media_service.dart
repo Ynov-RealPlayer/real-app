@@ -44,7 +44,6 @@ class MediaService {
         'Authorization': 'Bearer $token',
       },
     );
-
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body);
       return responseData;
@@ -66,6 +65,27 @@ class MediaService {
       return responseData;
     } else {
       throw Exception("Failed to get media");
+    }
+  }
+
+  static Future<List<dynamic>> getAllMedia() async {
+    final token = await AuthService.getToken();
+    final response = await http.get(
+      Uri.parse('$apiUrl/media'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final dynamic responseData = json.decode(response.body);
+      if (responseData is List<dynamic>) {
+        return responseData;
+      } else {
+        throw Exception('Invalid response data format');
+      }
+    } else {
+      throw Exception('Failed to get all medias');
     }
   }
 
