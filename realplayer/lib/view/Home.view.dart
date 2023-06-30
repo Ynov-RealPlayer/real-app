@@ -28,17 +28,14 @@ class _HomePageState extends State<HomePage> {
   int _currentSliderIndex = 0;
   List<dynamic> _categories = [];
   late Future<List<dynamic>> _data;
+  late Future<List<dynamic>> _dataMedia;
   int _currentIndex = 0;
   int? _selectedCategoryId;
   String? _selectedCategoryName;
 
   Future<void> _fetchCategories() async {
     _categories = await CategoryService.fetchCategories();
-    if (_categories.isNotEmpty) {
-      setState(() {
-        _data = fetchMediaCategData(_categories[_currentIndex]['id']);
-      });
-    }
+    print(_categories);
   }
 
   Future<List<dynamic>> fetchMediaCategData(int categoryId) async {
@@ -57,13 +54,23 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<List<dynamic>> fetchAllMediaData() async {
+    try {
+      final mediaData = await MediaService.getAllMedia();
+      final allMedia = mediaData as List<dynamic>;
+      print(allMedia);
+      return allMedia;
+    } catch (e) {
+      print('Erreur lors de la récupération du média: $e');
+      return [];
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _fetchCategories();
-    _data = _categories.isNotEmpty
-        ? fetchMediaCategData(_categories[_currentIndex]['id'])
-        : Future.value([]);
+    _data = fetchAllMediaData();
   }
 
   @override
@@ -85,19 +92,26 @@ class _HomePageState extends State<HomePage> {
                   itemCount: _categories.length,
                   itemBuilder: (BuildContext context, int index) {
                     final category = _categories[index];
-                    // print(category);
                     return GestureDetector(
                       onTap: () {
-                        if (_categories.isNotEmpty) {
-                          setState(() {
-                            _selectedCategoryId = category['id'];
-                            _selectedCategoryName = category['name'];
+                        setState(() {
+                          if (_currentSliderIndex == index) {
+                            // Si la catégorie est déjà sélectionnée, réinitialisez les valeurs
+                            _currentSliderIndex = -1;
+                            _currentIndex = -1;
+                            _selectedCategoryId = null;
+                            _selectedCategoryName = null;
+                            _data =
+                                fetchAllMediaData(); // Afficher tous les médias
+                          } else {
                             _currentSliderIndex = index;
                             _currentIndex = index;
-                            _data = fetchMediaCategData(
-                                _categories[_currentIndex]['id']);
-                          });
-                        }
+                            _selectedCategoryId = category['id'];
+                            _selectedCategoryName = category['name'];
+                            _data = fetchMediaCategData(category[
+                                'id']); // Afficher les médias de la catégorie sélectionnée
+                          }
+                        });
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -140,7 +154,6 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         final mediaList = snapshot.data!;
-                        // print(mediaList);
                         return GridView.builder(
                           itemCount: mediaList.length,
                           gridDelegate:
@@ -152,8 +165,6 @@ class _HomePageState extends State<HomePage> {
                           itemBuilder: (context, index) {
                             final mediaItem = mediaList[index];
                             final imageUrl = mediaItem['url'];
-                            // print(mediaItem);
-                            // print(imageUrl);
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
