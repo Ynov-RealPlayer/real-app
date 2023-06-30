@@ -1,10 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:realplayer/themes/color.dart';
 import '../services/media_service.dart';
-import '../services/auth_service.dart';
+import '../services/category_service.dart';
 
 void main() {
   runApp(MaterialApp(home: UploadPost()));
@@ -20,12 +21,19 @@ class _UploadPostState extends State<UploadPost> {
   final ImagePicker _picker = ImagePicker();
   final TextEditingController _titreController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _categoryIDController = TextEditingController();
+
+  List<dynamic> _categories = [];
+  List<DropdownMenuItem<int>> _dropdownMenuItems = [];
+
+  late Future<List<dynamic>> _data;
 
   Future getImage() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.blueGrey[900],
           title: Text(
             'Choisir une source',
             style: GoogleFonts.unicaOne(
@@ -80,6 +88,46 @@ class _UploadPostState extends State<UploadPost> {
     );
   }
 
+  Future<void> uploadPost() async {
+    if (_image != null) {
+      try {
+        final bool postCreated = await MediaService.PostMedia(
+          title: _titreController.text,
+          description: _descriptionController.text,
+          categoryID: _categoryIDController.text,
+          media: _image!,
+        );
+      } catch (e) {
+        print('An error occurred. Please try again.');
+        print(e);
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+        SnackBar(
+            content: Text(
+                "Veuillez sélectionner une image avant de poster")),
+      );
+    }
+  }
+
+  Future<void> _fetchCategories() async {
+    _categories = await CategoryService.fetchCategories();
+    _dropdownMenuItems = _categories
+        .map((category) => DropdownMenuItem<int>(
+      value: category['id'],
+      child: Text(category['name'] + ' ' + category['symbol']),
+    ))
+        .toList();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCategories();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,7 +167,7 @@ class _UploadPostState extends State<UploadPost> {
                           Container(
                             width: 150,
                             height: 150,
-                            color: ColorTheme.buttonColor,
+                            color: Colors.blue,
                           ),
                           Center(
                             child: GestureDetector(
@@ -129,10 +177,10 @@ class _UploadPostState extends State<UploadPost> {
                                 height: 150,
                                 child: _image == null
                                     ? Icon(
-                                        Icons.add,
-                                        size: 30,
-                                        color: Colors.white,
-                                      )
+                                  Icons.add,
+                                  size: 30,
+                                  color: Colors.white,
+                                )
                                     : Image.file(_image!, fit: BoxFit.cover),
                               ),
                             ),
@@ -146,7 +194,7 @@ class _UploadPostState extends State<UploadPost> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Titre du post:',
+                    'Titre du post :',
                     style: GoogleFonts.unicaOne(
                       fontSize: 18,
                       color: Colors.white,
@@ -176,7 +224,7 @@ class _UploadPostState extends State<UploadPost> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Description:',
+                    'Description :',
                     style: GoogleFonts.unicaOne(
                       fontSize: 18,
                       color: Colors.white,
@@ -203,43 +251,74 @@ class _UploadPostState extends State<UploadPost> {
                   ),
                   maxLines: 2,
                 ),
+
                 SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Catégorie :',
+                    style: GoogleFonts.unicaOne(
+                      fontSize: 18,
+                      color: Colors.white, // Changement de la couleur du texte en bleu
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
+                if (_dropdownMenuItems != null) // condition de garde
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      canvasColor: Color(0xff1d2b34),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField<int>(
+                        value: _categoryIDController.text.isNotEmpty ? int.parse(_categoryIDController.text) : null,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0), // réduction de la taille du champ
+                          hintText: 'Choisissez une catégorie',
+                          hintStyle: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff0272cd)),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff0272cd)),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: Colors.white, // Changement de la couleur du texte en bleu
+                        ),
+                        items: _dropdownMenuItems,
+                        onChanged: (value) {
+                          setState(() {
+                            _categoryIDController.text = value.toString();
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+// ...
+
+
+                SizedBox(height: 50),
                 Center(
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      try {
-                        final response = await MediaService.postMedia(
-                          name: _titreController.text,
-                          description: _descriptionController.text,
-                          mediaType: "SCREEN",
-                          url:
-                              "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjdhZWY1ZWU0ZGFhMmQ2MmMzNzRjM2M5NTc0NWRmZjIzZWIzMGM4OSZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/Wvh1de6cFXcWc/giphy.gif",
-                          duration: 0,
-                          categoryId: 1,
-                          userId: 1,
-                        );
-                        print("Réponse de l'API: $response");
-                      } catch (e) {
-                        print("Erreur lors de l'envoi du post: $e");
-                      }
-                    },
-                    icon: Icon(Icons.post_add),
-                    label: Text(
-                      'Créer le post',
+                  child: ElevatedButton(
+                    onPressed: uploadPost,
+                    child: Text(
+                      'Upload',
                       style: GoogleFonts.unicaOne(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xffffffff),
+                        fontSize: 26, // Ajout de la taille de la police
+                        color: Colors.white, // Ajout de la couleur du texte
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xff0272cd),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 8,
+                      primary: Colors.blue,
+                      onPrimary: Colors.white,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                     ),
                   ),
                 ),

@@ -319,8 +319,8 @@ class _MediaPageState extends State<MediaPage> {
                 ),
                 onPressed: () async {
                   try {
-                    final response = await MediaService.likeMedia(commentary['id'], 'Commentary');
-                    log(response.toString()); // Log entire response
+                    var  response = await MediaService.likeMedia(commentary['id'], 'Commentary');
+                    log(response.toString());
                     if (response["message"] == "success") {
                       setState(() {
                         if (response['like'] == "created") {
