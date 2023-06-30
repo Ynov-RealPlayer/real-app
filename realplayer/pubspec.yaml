@@ -51,6 +51,10 @@ dependencies:
 flutter_native_splash: 
   color: "#1D2B34"
   image: "assets/logo-real.png"
+  android: true
+  ios: true
+  scale: 2.0
+
 
 dev_dependencies:
   flutter_test:

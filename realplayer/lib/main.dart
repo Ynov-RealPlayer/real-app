@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: isLoggedIn ? const MainNavigator() : OnBoardingView(),
+      home: OnBoardingView(),
       routes: {
         '/UploadPost': (context) => UploadPost(),
         '/RegisterPage': (context) => RegisterPage(),
