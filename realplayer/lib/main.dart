@@ -5,6 +5,7 @@ import 'package:realplayer/view/Home.view.dart';
 import 'package:realplayer/view/OnBoarding.view.dart';
 import 'package:realplayer/view/Profile.View.dart';
 import 'package:realplayer/view/ProfileEdit.View.dart';
+import 'package:realplayer/view/Rating.view.dart';
 import 'package:realplayer/view/login.View.dart';
 import 'view/Register.view.dart';
 import 'view/UploadPost.view.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/MainNavigator': (context) => MainNavigator(),
         '/ProfileEdit': (context) =>
             ProfileEdit(userData: Future.value(userData)),
+        '/RatingPage': (context) => RatingPage(),
       },
     );
   }

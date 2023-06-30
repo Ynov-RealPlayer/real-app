@@ -119,7 +119,7 @@ class _MediaPageState extends State<MediaPage> {
             final String description = mediaData['description'] ?? '';
             final int user_id = mediaData['user_id'] ?? 0;
             final String url = mediaData['url'] ??
-                "https://www.journee-mondiale.com//medias/grande/images/journee/rien-du-tout.jpg";
+                "assets/images/shrek.jpg";
             final String profilePhotoUrl = mediaData['user']['picture'] ??
                 "https://www.journee-mondiale.com//medias/grande/images/journee/rien-du-tout.jpg";
             final int likes = mediaData['nb_likes'] ?? 0;

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +20,9 @@ class appBarHome extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           iconSize: 35,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/RatingPage');
+          },
           icon: SvgPicture.asset(
             "assets/icons/rating.svg",
           ),
