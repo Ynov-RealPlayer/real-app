@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realplayer/navigator.dart';
 import 'package:realplayer/services/profile_service.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:realplayer/view/Home.view.dart';
@@ -26,7 +27,12 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void _navigateToHome() {
-    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainNavigator(),
+      ),
+    );
   }
 
   Future<Map<String, dynamic>> _fetchUserData() async {
