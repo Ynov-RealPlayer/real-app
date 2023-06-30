@@ -27,12 +27,8 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void _navigateToHome() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MainNavigator(),
-      ),
-    );
+    Navigator.of(context)
+    .pushNamedAndRemoveUntil('/MainNavigator', (Route<dynamic> route) => false);
   }
 
   Future<Map<String, dynamic>> _fetchUserData() async {

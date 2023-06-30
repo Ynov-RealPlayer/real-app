@@ -184,6 +184,13 @@ class _HomePageState extends State<HomePage> {
                                   child: CachedNetworkImage(
                                     imageUrl: imageUrl,
                                     fit: BoxFit.cover,
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(
+                                      strokeWidth: 2.0,
+                                      color: ColorTheme.buttonColor,
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
                                   ),
                                 ),
                               ),

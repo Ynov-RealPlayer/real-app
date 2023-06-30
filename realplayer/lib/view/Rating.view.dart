@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:realplayer/services/user_service.dart';
@@ -76,15 +77,16 @@ class _RatingPageState extends State<RatingPage> {
                             "assets/icons/arrow_back.svg",
                           ),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/MainNavigator',
+                                (Route<dynamic> route) => false);
                           },
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.04),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -107,7 +109,7 @@ class _RatingPageState extends State<RatingPage> {
                                   ),
                                 ),
                                 CircleAvatar(
-                                  backgroundImage: NetworkImage(
+                                  backgroundImage: CachedNetworkImageProvider(
                                       users[1]["picture"].toString()),
                                   radius: 45,
                                 ),
@@ -164,7 +166,7 @@ class _RatingPageState extends State<RatingPage> {
                                   ),
                                 ),
                                 CircleAvatar(
-                                  backgroundImage: NetworkImage(
+                                  backgroundImage: CachedNetworkImageProvider(
                                       users[0]["picture"].toString()),
                                   radius: 60,
                                 ),
@@ -220,7 +222,7 @@ class _RatingPageState extends State<RatingPage> {
                                   ),
                                 ),
                                 CircleAvatar(
-                                  backgroundImage: NetworkImage(
+                                  backgroundImage: CachedNetworkImageProvider(
                                       users[2]["picture"].toString()),
                                   radius: 45,
                                 ),
@@ -259,8 +261,7 @@ class _RatingPageState extends State<RatingPage> {
                     ),
                   ],
                 ),
-                SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.04),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                 Expanded(
                   child: ListView.builder(
                     itemCount: users.length - 3,
@@ -268,8 +269,8 @@ class _RatingPageState extends State<RatingPage> {
                       index += 3;
                       return ListTile(
                         leading: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(users[index]["picture"].toString()),
+                          backgroundImage: CachedNetworkImageProvider(
+                              users[index]["picture"].toString()),
                         ),
                         title: Text(
                           users[index]["pseudo"].toString(),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:realplayer/themes/color.dart';
 import '../services/media_service.dart';
 import '../services/user_service.dart';
 
@@ -57,7 +58,7 @@ class _MediaPageState extends State<MediaPage> {
   Future<List<dynamic>?> getCommentariesData() async {
     try {
       final commentariesData =
-      await MediaService.getCommentaries(widget.postId);
+          await MediaService.getCommentaries(widget.postId);
       for (var comment in commentariesData) {
         _comLikes[comment['id']] = comment['nb_likes'] ?? 0;
         _comHasLiked[comment['id']] = comment['has_liked'] ?? false;
@@ -72,7 +73,7 @@ class _MediaPageState extends State<MediaPage> {
   Future<void> refreshCommentaries() async {
     try {
       final commentariesData =
-      await MediaService.getCommentaries(widget.postId);
+          await MediaService.getCommentaries(widget.postId);
       for (var comment in commentariesData) {
         _comLikes[comment['id']] = comment['nb_likes'] ?? 0;
         _comHasLiked[comment['id']] = comment['has_liked'] ?? false;
@@ -91,13 +92,12 @@ class _MediaPageState extends State<MediaPage> {
   Future<dynamic> fetchUserData(int userID) async {
     try {
       UserService userService = UserService();
-      final userData = await userService
-          .getUser(userID); 
+      final userData = await userService.getUser(userID);
       final String profilePhotoUrl = userData['picture'];
       return profilePhotoUrl;
     } catch (e) {
       log('Erreur lors de la récupération des données de l\'utilisateur: $e');
-      return null; 
+      return null;
     }
   }
 
@@ -118,8 +118,7 @@ class _MediaPageState extends State<MediaPage> {
             final String name = mediaData['name'] ?? '';
             final String description = mediaData['description'] ?? '';
             final int user_id = mediaData['user_id'] ?? 0;
-            final String url = mediaData['url'] ??
-                "assets/images/shrek.jpg";
+            final String url = mediaData['url'] ?? "assets/images/shrek.jpg";
             final String profilePhotoUrl = mediaData['user']['picture'] ??
                 "https://www.journee-mondiale.com//medias/grande/images/journee/rien-du-tout.jpg";
             final int likes = mediaData['nb_likes'] ?? 0;
@@ -132,6 +131,20 @@ class _MediaPageState extends State<MediaPage> {
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: double.infinity,
+                  placeholder: (context, url) => Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Center(
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        child: CircularProgressIndicator(
+                          color: ColorTheme.buttonColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
                 Column(
                   children: [
@@ -152,12 +165,9 @@ class _MediaPageState extends State<MediaPage> {
                               imageBuilder: (context, imageProvider) =>
                                   CircleAvatar(
                                 backgroundImage: imageProvider,
-                                radius: 20,
-                              ),
-                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                radius:
+                                    20, // Ajustez cette valeur pour réduire la taille du CircleAvatar
+                                  ),
                             ),
                           ),
                           Row(
@@ -172,8 +182,7 @@ class _MediaPageState extends State<MediaPage> {
                                     final response =
                                         await MediaService.likeMedia(
                                             widget.postId, 'Media');
-                                    log(response
-                                        .toString());
+                                    log(response.toString());
                                     if (response["message"] == "success") {
                                       setState(() {
                                         if (response['like'] == "created") {
