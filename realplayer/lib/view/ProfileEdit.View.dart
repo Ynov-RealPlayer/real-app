@@ -45,27 +45,16 @@ class _ProfileEditState extends State<ProfileEdit> {
     final description = _descriptionController!.text;
 
     try {
-      // Récupérer les données utilisateur
       final userData = await widget.userData;
-
-      // Extraire l'ID utilisateur
       final userId = userData['id'];
-
-      // Créer un objet avec les nouvelles informations
       final updatedData = {
         'pseudo': pseudo,
         'description': description,
       };
-
-      // Enregistrer les données du profil
       await ProfileService.saveUserData(userId, updatedData);
-
-      // Call the optional callback if provided
       if (widget.onSave != null) {
         widget.onSave!(updatedData);
       }
-
-      // Naviguer vers la page du profil
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ProfileView()),
@@ -92,7 +81,7 @@ class _ProfileEditState extends State<ProfileEdit> {
             ),
             SizedBox(height: 40),
             _pseudoController == null || _descriptionController == null
-                ? CircularProgressIndicator() // Show loading indicator while waiting for data
+                ? CircularProgressIndicator()
                 : Column(
                     children: [
                       SizedBox(

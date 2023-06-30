@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../services/media_service.dart';
 import '../services/user_service.dart';
@@ -10,7 +11,6 @@ void main() {
 class MediaPage extends StatefulWidget {
   final int postId;
 
-  // Constructeur
   MediaPage({required this.postId});
 
   @override
@@ -50,7 +50,7 @@ class _MediaPageState extends State<MediaPage> {
       return mediaData;
     } catch (e) {
       log('Erreur lors de la récupération du média: $e');
-      return {}; // Retourne une valeur vide en cas d'erreur
+      return {};
     }
   }
 
@@ -65,7 +65,7 @@ class _MediaPageState extends State<MediaPage> {
       return commentariesData;
     } catch (e) {
       log('Erreur lors de la récupération des commentaires : $e');
-      return null; // Retourne null en cas d'erreur
+      return null;
     }
   }
 
@@ -91,12 +91,13 @@ class _MediaPageState extends State<MediaPage> {
   Future<dynamic> fetchUserData(int userID) async {
     try {
       UserService userService = UserService();
-      final userData = await userService.getUser(userID); // Remplacez 1 par l'ID de l'utilisateur souhaité
+      final userData = await userService
+          .getUser(userID); 
       final String profilePhotoUrl = userData['picture'];
       return profilePhotoUrl;
     } catch (e) {
       log('Erreur lors de la récupération des données de l\'utilisateur: $e');
-      return null; // Retourne null en cas d'erreur
+      return null; 
     }
   }
 
@@ -108,14 +109,12 @@ class _MediaPageState extends State<MediaPage> {
         future: _mediaData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // Affiche un indicateur de chargement si les données sont en cours de chargement
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(
                 child: Text('Erreur lors de la récupération des données'));
           } else {
             final mediaData = snapshot.data ?? {};
-
             final String name = mediaData['name'] ?? '';
             final String description = mediaData['description'] ?? '';
             final int user_id = mediaData['user_id'] ?? 0;
@@ -128,8 +127,8 @@ class _MediaPageState extends State<MediaPage> {
 
             return Stack(
               children: [
-                Image.network(
-                  url,
+                CachedNetworkImage(
+                  imageUrl: url,
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: double.infinity,
@@ -138,7 +137,7 @@ class _MediaPageState extends State<MediaPage> {
                   children: [
                     Padding(
                       padding:
-                      const EdgeInsets.only(top: 40.0, left: 8, right: 8),
+                          const EdgeInsets.only(top: 40.0, left: 8, right: 8),
                       child: Row(
                         children: [
                           IconButton(
@@ -148,9 +147,17 @@ class _MediaPageState extends State<MediaPage> {
                             },
                           ),
                           Expanded(
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(profilePhotoUrl),
-                              radius: 20,
+                            child: CachedNetworkImage(
+                              imageUrl: profilePhotoUrl,
+                              imageBuilder: (context, imageProvider) =>
+                                  CircleAvatar(
+                                backgroundImage: imageProvider,
+                                radius: 20,
+                              ),
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
                             ),
                           ),
                           Row(
@@ -162,8 +169,11 @@ class _MediaPageState extends State<MediaPage> {
                                 ),
                                 onPressed: () async {
                                   try {
-                                    final response = await MediaService.likeMedia(widget.postId, 'Media');
-                                    log(response.toString()); // Log entire response
+                                    final response =
+                                        await MediaService.likeMedia(
+                                            widget.postId, 'Media');
+                                    log(response
+                                        .toString());
                                     if (response["message"] == "success") {
                                       setState(() {
                                         if (response['like'] == "created") {
@@ -176,8 +186,8 @@ class _MediaPageState extends State<MediaPage> {
                                       });
                                     }
                                   } catch (e) {
-                                    print('Erreur lors de l\'ajout du j\'aime : $e');
-                                    // Gérez l'erreur si nécessaire
+                                    print(
+                                        'Erreur lors de l\'ajout du j\'aime : $e');
                                   }
                                 },
                               ),
@@ -193,12 +203,12 @@ class _MediaPageState extends State<MediaPage> {
                     Expanded(
                       child: SingleChildScrollView(
                           child: Column(
-                            children: [
-                              Text(name, style: TextStyle(color: Colors.white)),
-                              Text(description,
-                                  style: TextStyle(color: Colors.white)),
-                            ],
-                          )),
+                        children: [
+                          Text(name, style: TextStyle(color: Colors.white)),
+                          Text(description,
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      )),
                     ),
                     _buildCommentInput(),
                   ],
@@ -282,9 +292,10 @@ class _MediaPageState extends State<MediaPage> {
         final String username = commentary['username'] ?? '';
         final int user_id = commentary['user_id'] ?? 0;
         final String content = commentary['content'] ?? '';
-        //log(commentaries.toString());
-        final int comLikes = _comLikes[commentary['id']] ?? (commentary['nb_likes'] ?? 0);
-        final bool comHasLiked = _comHasLiked[commentary['id']] ?? (commentary['has_liked'] ?? false);
+        final int comLikes =
+            _comLikes[commentary['id']] ?? (commentary['nb_likes'] ?? 0);
+        final bool comHasLiked = _comHasLiked[commentary['id']] ??
+            (commentary['has_liked'] ?? false);
 
         return ListTile(
           leading: FutureBuilder<dynamic>(
@@ -295,8 +306,17 @@ class _MediaPageState extends State<MediaPage> {
                   backgroundImage: AssetImage('assets/images/logo-real.png'),
                 );
               } else {
-                return CircleAvatar(
-                  backgroundImage: NetworkImage(comProfilePhotoUrl),
+                return CachedNetworkImage(
+                  imageUrl: comProfilePhotoUrl,
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    backgroundImage: imageProvider,
+                  ),
+                  placeholder: (context, url) => CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/logo-real.png'),
+                  ),
+                  errorWidget: (context, url, error) => CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/logo-real.png'),
+                  ),
                 );
               }
             },
@@ -319,8 +339,9 @@ class _MediaPageState extends State<MediaPage> {
                 ),
                 onPressed: () async {
                   try {
-                    final response = await MediaService.likeMedia(commentary['id'], 'Commentary');
-                    log(response.toString()); // Log entire response
+                    final response = await MediaService.likeMedia(
+                        commentary['id'], 'Commentary');
+                    log(response.toString());
                     if (response["message"] == "success") {
                       setState(() {
                         if (response['like'] == "created") {
@@ -334,7 +355,6 @@ class _MediaPageState extends State<MediaPage> {
                     }
                   } catch (e) {
                     print('Erreur lors de l\'ajout du j\'aime : $e');
-                    // Gérez l'erreur si nécessaire
                   }
                 },
               ),
@@ -382,7 +402,7 @@ class _MediaPageState extends State<MediaPage> {
                     mediaId: widget.postId,
                   );
                   _commentController.clear();
-                  refreshCommentaries(); // Appeler la fonction pour récupérer les commentaires mis à jour
+                  refreshCommentaries();
                 } catch (e) {
                   print('Erreur lors de la publication du commentaire : $e');
                 }
