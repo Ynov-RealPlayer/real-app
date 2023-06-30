@@ -19,7 +19,7 @@ import 'package:realplayer/view/components/AppBar.view.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -35,25 +35,40 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchCategories() async {
     _categories = await CategoryService.fetchCategories();
+    _categories.insert(0, {
+      'id': 0,
+      'name': 'All',
+      'symbol': '⚡️',
+    });
     if (_categories.isNotEmpty) {
       setState(() {
-        _data = fetchMediaCategData(_categories[_currentIndex]['id']);
+        _selectedCategoryId = _categories[_currentIndex]['id'];
+        _selectedCategoryName = _categories[_currentIndex]['name'];
+        _data = _selectedCategoryId == 0
+            ? fetchAllMediaData()
+            : fetchMediaCategData(_selectedCategoryId!);
       });
+    }
+  }
+
+  Future<List<dynamic>> fetchAllMediaData() async {
+    try {
+      final mediaData = await MediaService.getAllMedia();
+      final allMedia = mediaData as List<dynamic>;
+      return allMedia;
+    } catch (e) {
+      print('Erreur lors de la récupération du média: $e');
+      return [];
     }
   }
 
   Future<List<dynamic>> fetchMediaCategData(int categoryId) async {
     try {
-      if (_categories.isNotEmpty) {
-        final mediaCategData =
-            await MediaService.getMediaByCategorie(categoryId);
-        final mediaList = mediaCategData;
-        return mediaList;
-      } else {
-        return [];
-      }
+      final mediaCategData = await MediaService.getMediaByCategorie(categoryId);
+      final mediaList = mediaCategData as List<dynamic>;
+      return mediaList;
     } catch (e) {
-      print('Erreur lors de la récupération du categmédia: $e');
+      print('Erreur lors de la récupération du média de la catégorie: $e');
       return [];
     }
   }
@@ -62,9 +77,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _fetchCategories();
-    _data = _categories.isNotEmpty
-        ? fetchMediaCategData(_categories[_currentIndex]['id'])
-        : Future.value([]);
+    _data = Future.value([]);
   }
 
   @override
@@ -86,19 +99,17 @@ class _HomePageState extends State<HomePage> {
                   itemCount: _categories.length,
                   itemBuilder: (BuildContext context, int index) {
                     final category = _categories[index];
-                    // print(category);
                     return GestureDetector(
                       onTap: () {
-                        if (_categories.isNotEmpty) {
-                          setState(() {
-                            _selectedCategoryId = category['id'];
-                            _selectedCategoryName = category['name'];
-                            _currentSliderIndex = index;
-                            _currentIndex = index;
-                            _data = fetchMediaCategData(
-                                _categories[_currentIndex]['id']);
-                          });
-                        }
+                        setState(() {
+                          _selectedCategoryId = category['id'];
+                          _selectedCategoryName = category['name'];
+                          _currentSliderIndex = index;
+                          _currentIndex = index;
+                          _data = _selectedCategoryId == 0
+                              ? fetchAllMediaData()
+                              : fetchMediaCategData(_selectedCategoryId!);
+                        });
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -141,7 +152,6 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         final mediaList = snapshot.data!;
-                        // print(mediaList);
                         return GridView.builder(
                           itemCount: mediaList.length,
                           gridDelegate:
@@ -153,8 +163,6 @@ class _HomePageState extends State<HomePage> {
                           itemBuilder: (context, index) {
                             final mediaItem = mediaList[index];
                             final imageUrl = mediaItem['url'];
-                            // print(mediaItem);
-                            // print(imageUrl);
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(

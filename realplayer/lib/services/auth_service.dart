@@ -68,7 +68,7 @@ class AuthService {
     if (response.statusCode == 200) {
       return true;
     } else {
-      return true;
+      return false;
     }
   }
 
