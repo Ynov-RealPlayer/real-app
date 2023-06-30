@@ -18,7 +18,7 @@ import 'package:realplayer/view/components/AppBar.view.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -28,29 +28,25 @@ class _HomePageState extends State<HomePage> {
   int _currentSliderIndex = 0;
   List<dynamic> _categories = [];
   late Future<List<dynamic>> _data;
-  late Future<List<dynamic>> _dataMedia;
   int _currentIndex = 0;
   int? _selectedCategoryId;
   String? _selectedCategoryName;
 
   Future<void> _fetchCategories() async {
     _categories = await CategoryService.fetchCategories();
-    print(_categories);
-  }
-
-  Future<List<dynamic>> fetchMediaCategData(int categoryId) async {
-    try {
-      if (_categories.isNotEmpty) {
-        final mediaCategData =
-            await MediaService.getMediaByCategorie(categoryId);
-        final mediaList = mediaCategData;
-        return mediaList;
-      } else {
-        return [];
-      }
-    } catch (e) {
-      print('Erreur lors de la récupération du categmédia: $e');
-      return [];
+    _categories.insert(0, {
+      'id': 0,
+      'name': 'All',
+      'symbol': '⚡️',
+    });
+    if (_categories.isNotEmpty) {
+      setState(() {
+        _selectedCategoryId = _categories[_currentIndex]['id'];
+        _selectedCategoryName = _categories[_currentIndex]['name'];
+        _data = _selectedCategoryId == 0
+            ? fetchAllMediaData()
+            : fetchMediaCategData(_selectedCategoryId!);
+      });
     }
   }
 
@@ -58,10 +54,20 @@ class _HomePageState extends State<HomePage> {
     try {
       final mediaData = await MediaService.getAllMedia();
       final allMedia = mediaData as List<dynamic>;
-      print(allMedia);
       return allMedia;
     } catch (e) {
       print('Erreur lors de la récupération du média: $e');
+      return [];
+    }
+  }
+
+  Future<List<dynamic>> fetchMediaCategData(int categoryId) async {
+    try {
+      final mediaCategData = await MediaService.getMediaByCategorie(categoryId);
+      final mediaList = mediaCategData as List<dynamic>;
+      return mediaList;
+    } catch (e) {
+      print('Erreur lors de la récupération du média de la catégorie: $e');
       return [];
     }
   }
@@ -70,7 +76,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _fetchCategories();
-    _data = fetchAllMediaData();
+    _data = Future.value([]);
   }
 
   @override
@@ -95,22 +101,13 @@ class _HomePageState extends State<HomePage> {
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          if (_currentSliderIndex == index) {
-                            // Si la catégorie est déjà sélectionnée, réinitialisez les valeurs
-                            _currentSliderIndex = -1;
-                            _currentIndex = -1;
-                            _selectedCategoryId = null;
-                            _selectedCategoryName = null;
-                            _data =
-                                fetchAllMediaData(); // Afficher tous les médias
-                          } else {
-                            _currentSliderIndex = index;
-                            _currentIndex = index;
-                            _selectedCategoryId = category['id'];
-                            _selectedCategoryName = category['name'];
-                            _data = fetchMediaCategData(category[
-                                'id']); // Afficher les médias de la catégorie sélectionnée
-                          }
+                          _selectedCategoryId = category['id'];
+                          _selectedCategoryName = category['name'];
+                          _currentSliderIndex = index;
+                          _currentIndex = index;
+                          _data = _selectedCategoryId == 0
+                              ? fetchAllMediaData()
+                              : fetchMediaCategData(_selectedCategoryId!);
                         });
                       },
                       child: Container(
