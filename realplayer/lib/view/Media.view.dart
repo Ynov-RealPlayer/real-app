@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:realplayer/themes/color.dart';
 import '../services/media_service.dart';
 import '../services/user_service.dart';
@@ -91,8 +92,7 @@ class _MediaPageState extends State<MediaPage> {
 
   Future<dynamic> fetchUserData(int userID) async {
     try {
-      UserService userService = UserService();
-      final userData = await userService.getUser(userID);
+      Map<dynamic, dynamic> userData = await UserService.getUser(userID);
       final String profilePhotoUrl = userData['picture'];
       return profilePhotoUrl;
     } catch (e) {
@@ -202,7 +202,7 @@ class _MediaPageState extends State<MediaPage> {
                               ),
                               Text(
                                 '$_likes',
-                                style: TextStyle(color: Colors.white),
+                                style: GoogleFonts.unicaOne(color: Colors.white),
                               ),
                             ],
                           ),
@@ -212,12 +212,12 @@ class _MediaPageState extends State<MediaPage> {
                     Expanded(
                       child: SingleChildScrollView(
                           child: Column(
-                        children: [
-                          Text(name, style: TextStyle(color: Colors.white)),
-                          Text(description,
-                              style: TextStyle(color: Colors.white)),
-                        ],
-                      )),
+                            children: [
+                              Text(name, style: GoogleFonts.unicaOne(color: Colors.white)),
+                              Text(description, style: GoogleFonts.unicaOne(color: Colors.white)),
+                            ],
+                          )
+                      ),
                     ),
                     _buildCommentInput(),
                   ],
@@ -272,14 +272,14 @@ class _MediaPageState extends State<MediaPage> {
           } else if (snapshot.hasError) {
             return Text(
               'Erreur lors de la récupération des commentaires',
-              style: TextStyle(color: Colors.white),
+              style: GoogleFonts.unicaOne(color: Colors.white),
             );
           } else {
             final commentariesData = snapshot.data;
             if (commentariesData == null || commentariesData.isEmpty) {
               return Text(
                 'Aucun commentaire',
-                style: TextStyle(color: Colors.white),
+                style: GoogleFonts.unicaOne(color: Colors.white),
               );
             } else {
               return _buildCommentaries(commentariesData);
@@ -332,11 +332,11 @@ class _MediaPageState extends State<MediaPage> {
           ),
           title: Text(
             username,
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.unicaOne(color: Colors.white),
           ),
           subtitle: Text(
             content,
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.unicaOne(color: Colors.white),
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -348,8 +348,7 @@ class _MediaPageState extends State<MediaPage> {
                 ),
                 onPressed: () async {
                   try {
-                    final response = await MediaService.likeMedia(
-                        commentary['id'], 'Commentary');
+                    var  response = await MediaService.likeMedia(commentary['id'], 'Commentary');
                     log(response.toString());
                     if (response["message"] == "success") {
                       setState(() {
@@ -369,7 +368,7 @@ class _MediaPageState extends State<MediaPage> {
               ),
               Text(
                 comLikes.toString(),
-                style: TextStyle(color: Colors.white),
+                style: GoogleFonts.unicaOne(color: Colors.white),
               ),
             ],
           ),
@@ -387,8 +386,8 @@ class _MediaPageState extends State<MediaPage> {
             child: TextField(
               controller: _commentController,
               decoration: InputDecoration(
-                hintText: 'Add a comment...',
-                hintStyle: TextStyle(color: Color(0x99ffffff)),
+                hintText: 'Ajouter un commentaire...',
+                hintStyle: GoogleFonts.unicaOne(color: Color(0x99ffffff)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
                 ),
@@ -397,7 +396,7 @@ class _MediaPageState extends State<MediaPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
+              style: GoogleFonts.unicaOne(color: Colors.white),
             ),
           ),
           IconButton(
