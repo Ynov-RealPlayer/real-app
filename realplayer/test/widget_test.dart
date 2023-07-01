@@ -13,7 +13,7 @@ import 'package:realplayer/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp(isLoggedIn: true)); // j'ai ajouté isLoggedIn: true vu qu'il a besoin de ca mtn
+    await tester.pumpWidget(MyApp(isLoggedIn: true, userData: const {},)); // j'ai ajouté isLoggedIn: true vu qu'il a besoin de ca mtn
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

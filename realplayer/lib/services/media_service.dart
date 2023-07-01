@@ -2,42 +2,37 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:realplayer/services/auth_service.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 
 import 'auth_service.dart';
 
 class MediaService {
   static const apiUrl = "https://realplayer.fr/api";
 
-  static Future<Map<String, dynamic>> postMedia({
-    required String name,
+  static Future<bool> PostMedia({
+    required String title,
     required String description,
-    required String mediaType,
-    required String url,
-    required int duration,
-    required int categoryId,
-    required int userId,
+    required String categoryID,
+    required File media,
   }) async {
     final token = await AuthService.getToken();
-    final response = await http.post(
-      Uri.parse('$apiUrl/media'),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-      body: {
-        "name": name,
-        "description": description,
-        "media_type": mediaType,
-        "url": url,
-        "duration": duration.toString(),
-        "category_id": categoryId.toString(),
-        "user_id": userId.toString(),
-      },
-    );
+
+    var request = http.MultipartRequest('POST', Uri.parse('$apiUrl/media'));
+    request.headers['Authorization'] = 'Bearer $token';
+
+    request.fields['name'] = title;
+    request.fields['description'] = description;
+    request.fields['category_id'] = categoryID;
+
+    var mediaFile = await http.MultipartFile.fromPath('resource', media.path);
+    request.files.add(mediaFile);
+
+    var response = await request.send();
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      return responseData;
+      return true;
     } else {
-      throw Exception("Failed to post media");
+      return false;
     }
   }
 
@@ -49,7 +44,6 @@ class MediaService {
         'Authorization': 'Bearer $token',
       },
     );
-
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body);
       return responseData;
@@ -71,6 +65,27 @@ class MediaService {
       return responseData;
     } else {
       throw Exception("Failed to get media");
+    }
+  }
+
+  static Future<List<dynamic>> getAllMedia() async {
+    final token = await AuthService.getToken();
+    final response = await http.get(
+      Uri.parse('$apiUrl/media'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final dynamic responseData = json.decode(response.body);
+      if (responseData is List<dynamic>) {
+        return responseData;
+      } else {
+        throw Exception('Invalid response data format');
+      }
+    } else {
+      throw Exception('Failed to get all medias');
     }
   }
 

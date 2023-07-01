@@ -21,4 +21,23 @@ class ProfileService {
       throw Exception('Failed to load user data');
     }
   }
+
+  //update profile
+  static Future<Map<String, dynamic>> saveUserData(
+      int id, Map<String, dynamic> updatedData) async {
+    final token = await AuthService.getToken();
+    final response = await http.put(
+      Uri.parse('$apiUrl/users/$id'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+      body: updatedData,
+    );
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return jsonData;
+    } else {
+      throw Exception('Failed to update user data');
+    }
+  }
 }

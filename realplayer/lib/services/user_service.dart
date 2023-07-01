@@ -6,7 +6,7 @@ import 'auth_service.dart';
 class UserService {
   static const String apiUrlBase = "https://realplayer.fr/api/users";
 
-  Future<Map> getUser(int id) async {
+  static Future<Map> getUser(int id) async {
     String? token = await AuthService.getToken();
 
     if (token == null) {

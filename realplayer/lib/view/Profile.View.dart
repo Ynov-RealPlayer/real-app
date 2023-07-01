@@ -1,11 +1,12 @@
-import 'dart:math';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realplayer/navigator.dart';
 import 'package:realplayer/services/profile_service.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:realplayer/view/Home.view.dart';
+import 'package:realplayer/view/ProfileEdit.view.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
 
 class ProfileView extends StatefulWidget {
@@ -23,6 +24,11 @@ class _ProfileViewState extends State<ProfileView> {
   void initState() {
     super.initState();
     _userData = _fetchUserData();
+  }
+
+  void _navigateToHome() {
+    Navigator.of(context)
+    .pushNamedAndRemoveUntil('/MainNavigator', (Route<dynamic> route) => false);
   }
 
   Future<Map<String, dynamic>> _fetchUserData() async {
@@ -62,9 +68,17 @@ class _ProfileViewState extends State<ProfileView> {
                       height: MediaQuery.of(context).size.height * 0.25,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(banner),
+                          image: CachedNetworkImageProvider(banner),
                           fit: BoxFit.cover,
                         ),
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: banner,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                     ),
                     Positioned(
@@ -80,7 +94,7 @@ class _ProfileViewState extends State<ProfileView> {
                             "assets/icons/arrow_back.svg",
                           ),
                           onPressed: () {
-                            Navigator.pop(context);
+                            _navigateToHome();
                           },
                         ),
                       ),
@@ -99,7 +113,7 @@ class _ProfileViewState extends State<ProfileView> {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.pushNamed(context, '/ProfileEdit');
                           },
                         ),
                       ),
@@ -117,8 +131,8 @@ class _ProfileViewState extends State<ProfileView> {
                       Column(
                         children: [
                           ClipOval(
-                            child: Image.network(
-                              picture,
+                            child: CachedNetworkImage(
+                              imageUrl: picture,
                               width: 128,
                               height: 128,
                               fit: BoxFit.cover,
@@ -247,7 +261,6 @@ class _ProfileViewState extends State<ProfileView> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Column(
-                        //  medias.map((media) {
                         children: [
                           Text(
                             mediaCount.toString(),
@@ -316,7 +329,6 @@ class _ProfileViewState extends State<ProfileView> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            // Button click logic
                           },
                           style: ElevatedButton.styleFrom(
                             primary: ColorTheme.buttonColor,
@@ -424,14 +436,12 @@ class PostItem extends StatelessWidget {
       padding: const EdgeInsets.all(2.0),
       child: Column(
         children: [
-          Image.network(
-            imageUrl,
+          CachedNetworkImage(
+            imageUrl: imageUrl,
             fit: BoxFit.cover,
             width: 150,
             height: 150,
           ),
-          // SizedBox(height: 1.0),
-          // SizedBox(height: 1.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

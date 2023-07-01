@@ -142,6 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           SvgPicture.asset(
                             'assets/icons/account.svg',
+                            color: Color(0x99ffffff),
                           ),
                           SizedBox(width: 10),
                           Expanded(
