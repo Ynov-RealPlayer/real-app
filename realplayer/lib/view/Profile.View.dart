@@ -2,8 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realplayer/services/auth_service.dart';
 import 'package:realplayer/services/profile_service.dart';
+import 'package:realplayer/services/user_service.dart';
 import 'package:realplayer/themes/color.dart';
+import 'package:realplayer/view/login.View.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
 
 class ProfileView extends StatefulWidget {
@@ -24,8 +27,8 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void _navigateToHome() {
-    Navigator.of(context)
-    .pushNamedAndRemoveUntil('/MainNavigator', (Route<dynamic> route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        '/MainNavigator', (Route<dynamic> route) => false);
   }
 
   Future<Map<String, dynamic>> _fetchUserData() async {
@@ -325,8 +328,7 @@ class _ProfileViewState extends State<ProfileView> {
                     child: Row(
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                          },
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             primary: ColorTheme.buttonColor,
                             padding: EdgeInsets.symmetric(
@@ -344,7 +346,27 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                         ),
                         SizedBox(width: 10),
-                        SvgPicture.asset("assets/icons/iconForbidden.svg"),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ColorTheme.buttonColor,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.exit_to_app,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              AuthService.removeToken();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),

@@ -47,6 +47,7 @@ dependencies:
   badges: ^3.1.1
   simple_animation_progress_bar: ^1.6.0
   cached_network_image: ^3.2.3
+  easy_search_bar: ^2.5.0
 
 flutter_native_splash: 
   color: "#1D2B34"
