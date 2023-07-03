@@ -15,7 +15,8 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _navigateToHome() {
-    Navigator.pushNamed(context, '/MainNavigator');
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        '/MainNavigator', (Route<dynamic> route) => false);
   }
 
   @override
@@ -88,7 +89,6 @@ class _LoginPageState extends State<LoginPage> {
                                         );
                                       } else {
                                         if (_formKey.currentState!.validate()) {
-
                                           try {
                                             await AuthService.login(
                                                 _emailController.text,
