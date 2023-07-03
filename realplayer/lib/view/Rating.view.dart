@@ -6,6 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'ProfileOtherUser.View.dart';
+
 class RatingPage extends StatefulWidget {
   const RatingPage();
 
@@ -106,11 +108,23 @@ class _RatingPageState extends State<RatingPage> {
                                         color: ColorTheme.buttonColor),
                                   ),
                                 ),
-                                CircleAvatar(
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      users[1]["picture"].toString()),
-                                  radius: 45,
-                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProfileOtherUserView(
+                                          idUser: users[1]["id"],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        users[1]["picture"].toString()),
+                                    radius: 45,
+                                  ),
+                                )
                               ],
                             ),
                             SizedBox(height: 20),
@@ -163,11 +177,23 @@ class _RatingPageState extends State<RatingPage> {
                                         color: ColorTheme.buttonColor),
                                   ),
                                 ),
-                                CircleAvatar(
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      users[0]["picture"].toString()),
-                                  radius: 60,
-                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProfileOtherUserView(
+                                          idUser: users[0]["id"],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        users[0]["picture"].toString()),
+                                    radius: 60,
+                                  ),
+                                )
                               ],
                             ),
                             SizedBox(height: 20),
@@ -219,11 +245,23 @@ class _RatingPageState extends State<RatingPage> {
                                         color: ColorTheme.buttonColor),
                                   ),
                                 ),
-                                CircleAvatar(
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      users[2]["picture"].toString()),
-                                  radius: 45,
-                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProfileOtherUserView(
+                                          idUser: users[2]["id"],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        users[2]["picture"].toString()),
+                                    radius: 45,
+                                  ),
+                                )
                               ],
                             ),
                             SizedBox(height: 20),
