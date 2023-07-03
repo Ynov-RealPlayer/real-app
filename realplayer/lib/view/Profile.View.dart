@@ -44,7 +44,7 @@ class _ProfileViewState extends State<ProfileView> {
         if (snapshot.hasData && snapshot.data != null) {
           final userData = snapshot.data!;
           final String pseudo = userData['pseudo'];
-          final String description = userData['description'];
+          final String description = userData['description'] ?? '';
           final String picture = userData['picture'];
           final String banner = userData['banner'];
           final int experience = userData['experience'];
