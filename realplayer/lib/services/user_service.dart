@@ -41,4 +41,20 @@ class UserService {
       throw Exception('erreur');
     }
   }
+
+  Future<Map<String, dynamic>> fetchOtherUserData(int id) async {
+    final token = await AuthService.getToken();
+    final response = await http.get(
+      Uri.parse('$apiUrlBase/$id'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return jsonData;
+    } else {
+      throw Exception('Failed to load user data');
+    }
+  }
 }
