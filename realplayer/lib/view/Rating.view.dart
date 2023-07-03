@@ -304,9 +304,22 @@ class _RatingPageState extends State<RatingPage> {
                     itemBuilder: (context, index) {
                       index += 3;
                       return ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: CachedNetworkImageProvider(
-                              users[index]["picture"].toString()),
+                        leading: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfileOtherUserView(
+                                  idUser: users[index]["id"],
+                                ),
+                              ),
+                            );
+                          },
+                          child: CircleAvatar(
+                            backgroundImage: CachedNetworkImageProvider(
+                                users[index]["picture"].toString()),
+                            radius: 23,
+                          ),
                         ),
                         title: Text(
                           users[index]["pseudo"].toString(),
