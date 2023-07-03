@@ -22,7 +22,6 @@ class ProfileService {
     }
   }
 
-  //update profile
   static Future<Map<String, dynamic>> saveUserData(
       int id, Map<String, dynamic> updatedData) async {
     final token = await AuthService.getToken();

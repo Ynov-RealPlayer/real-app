@@ -166,7 +166,7 @@ class _MediaPageState extends State<MediaPage> {
                                   CircleAvatar(
                                 backgroundImage: imageProvider,
                                 radius:
-                                    20, // Ajustez cette valeur pour réduire la taille du CircleAvatar
+                                    20,
                                   ),
                             ),
                           ),

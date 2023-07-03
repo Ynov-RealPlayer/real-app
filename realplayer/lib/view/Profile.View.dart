@@ -2,11 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:realplayer/navigator.dart';
 import 'package:realplayer/services/profile_service.dart';
 import 'package:realplayer/themes/color.dart';
-import 'package:realplayer/view/Home.view.dart';
-import 'package:realplayer/view/ProfileEdit.view.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
 
 class ProfileView extends StatefulWidget {

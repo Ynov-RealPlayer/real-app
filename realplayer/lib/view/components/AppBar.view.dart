@@ -1,11 +1,6 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
-import 'package:realplayer/services/category_service.dart';
-import 'package:realplayer/services/media_service.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:badges/badges.dart' as badges;
 

@@ -4,7 +4,6 @@ import 'package:realplayer/view/login.view.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realplayer/themes/string.dart';
-import 'package:realplayer/view/Home.view.dart';
 
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({super.key});

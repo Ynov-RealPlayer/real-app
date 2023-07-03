@@ -16,7 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final isLoggedIn = await AuthService.isLoggedIn();
   final userData = await ProfileService()
-      .fetchUserData(); // Récupère les données utilisateur à l'aide du service ProfileService
+      .fetchUserData();
   runApp(MyApp(isLoggedIn: isLoggedIn, userData: userData));
 }
 

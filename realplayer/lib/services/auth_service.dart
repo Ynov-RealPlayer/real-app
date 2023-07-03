@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,7 +55,6 @@ class AuthService {
     await prefs.remove('token');
   }
 
-  //verify token
   static Future<bool> verifyToken() async {
     final token = await AuthService.getToken();
     final response = await http.post(

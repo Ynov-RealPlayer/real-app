@@ -1,22 +1,13 @@
-import 'dart:convert';
 import 'dart:async';
 import 'dart:core';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:realplayer/services/auth_service.dart';
 import 'package:realplayer/services/media_service.dart';
 import 'package:realplayer/themes/color.dart';
-import 'package:realplayer/view/Boutique.View.dart';
-import 'package:realplayer/view/CoinShop.View.dart';
 import 'package:realplayer/view/Media.view.dart';
-import 'package:realplayer/view/Profile.View.dart';
-import 'package:http/http.dart' as http;
 import 'package:realplayer/services/category_service.dart';
 import 'package:realplayer/view/components/AppBar.view.dart';
-import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
