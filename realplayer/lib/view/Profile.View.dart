@@ -19,6 +19,7 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView> {
   final profileService = ProfileService();
   late Future<Map<String, dynamic>> _userData;
+  List<String> badgeIcons = [];
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _ProfileViewState extends State<ProfileView> {
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
           final userData = snapshot.data!;
+          print(userData);
           final String pseudo = userData['pseudo'];
           final String description = userData['description'] ?? '';
           final String picture = userData['picture'];
@@ -57,6 +59,13 @@ class _ProfileViewState extends State<ProfileView> {
           final int mediaCount = medias.length;
           int totalComments = 0;
           int totalLikes = 0;
+          for (var badge in userData['badges']) {
+            final icon = badge['badge']['icon'];
+            badgeIcons.add(icon);
+          }
+          for (var icon in badgeIcons) {
+            print(icon);
+          }
           medias.forEach((media) {
             totalComments += (media['nb_comments'] as num).toInt();
           });
@@ -168,15 +177,15 @@ class _ProfileViewState extends State<ProfileView> {
                               color: Colors.white,
                             ),
                           ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //   children: const [
-                          //     Icon(Icons.home, color: Colors.white),
-                          //     Icon(Icons.search, color: Colors.white),
-                          //     Icon(Icons.notifications, color: Colors.white),
-                          //     Icon(Icons.person, color: Colors.white),
-                          //   ],
-                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: badgeIcons
+                                .map((icon) => Text(
+                                      icon,
+                                      style: TextStyle(fontSize: 20),
+                                    ))
+                                .toList(),
+                          ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.005,
                           ),
@@ -221,7 +230,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                 ),
                 Positioned(
-                  top: MediaQuery.of(context).size.height * 0.36,
+                  top: MediaQuery.of(context).size.height * 0.38,
                   left: 16.0,
                   child: Container(
                     width: MediaQuery.of(context).size.width - 32.0,
