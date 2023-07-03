@@ -32,7 +32,9 @@ class appBarHome extends StatelessWidget implements PreferredSizeWidget {
           children: [
             IconButton(
               iconSize: 40,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/NotifPage');
+              },
               icon: SvgPicture.asset(
                 "assets/icons/notif.svg",
               ),
