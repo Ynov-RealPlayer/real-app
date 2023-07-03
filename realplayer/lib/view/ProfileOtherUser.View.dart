@@ -54,6 +54,11 @@ class _ProfileOtherUserViewState extends State<ProfileOtherUserView> {
           final String picture = userData['picture'];
           final String banner = userData['banner'];
           final int experience = userData['experience'];
+          final int colorR = userData['bar_colors'][0];
+          final int colorG = userData['bar_colors'][1];
+          final int colorB = userData['bar_colors'][2];
+          final double percent = userData['xp_progress'];
+          final String rank = userData['rank']['name'];
           final List<dynamic> medias = userData['medias'];
           final int mediaCount = medias.length;
           int totalComments = 0;
@@ -165,7 +170,7 @@ class _ProfileOtherUserViewState extends State<ProfileOtherUserView> {
                           Row(
                             children: [
                               Text(
-                                "Silver",
+                                rank,
                                 style: GoogleFonts.unicaOne(
                                   fontSize: 15,
                                   color: Colors.white,
@@ -175,7 +180,7 @@ class _ProfileOtherUserViewState extends State<ProfileOtherUserView> {
                                 width: MediaQuery.of(context).size.width * 0.18,
                               ),
                               Text(
-                                "50%",
+                                (percent*100).toString() + "%",
                                 style: GoogleFonts.unicaOne(
                                   fontSize: 13,
                                   color: Colors.white,
@@ -184,21 +189,14 @@ class _ProfileOtherUserViewState extends State<ProfileOtherUserView> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.18,
                               ),
-                              Text(
-                                "Gold",
-                                style: GoogleFonts.unicaOne(
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                ),
-                              ),
                             ],
                           ),
                           SimpleAnimationProgressBar(
                             height: 10,
-                            width: 250,
+                            width: 230,
                             backgroundColor: Colors.grey.shade800,
                             foregrondColor: ColorTheme.progresshBarColor,
-                            ratio: 0.5,
+                            ratio: percent,
                             direction: Axis.horizontal,
                             curve: Curves.fastLinearToSlowEaseIn,
                             duration: const Duration(seconds: 2),

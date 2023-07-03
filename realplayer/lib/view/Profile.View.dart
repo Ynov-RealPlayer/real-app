@@ -47,6 +47,11 @@ class _ProfileViewState extends State<ProfileView> {
           final String description = userData['description'] ?? '';
           final String picture = userData['picture'];
           final String banner = userData['banner'];
+          final int colorR = userData['bar_colors'][0];
+          final int colorG = userData['bar_colors'][1];
+          final int colorB = userData['bar_colors'][2];
+          final double percent = userData['xp_progress'];
+          final String rank = userData['rank']['name'];
           final int experience = userData['experience'];
           final List<dynamic> medias = userData['medias'];
           final int mediaCount = medias.length;
@@ -178,7 +183,7 @@ class _ProfileViewState extends State<ProfileView> {
                           Row(
                             children: [
                               Text(
-                                "Silver",
+                                rank,
                                 style: GoogleFonts.unicaOne(
                                   fontSize: 15.0,
                                   color: Colors.white,
@@ -188,7 +193,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 width: MediaQuery.of(context).size.width * 0.18,
                               ),
                               Text(
-                                "50%",
+                                (percent*100).toString() + "%",
                                 style: GoogleFonts.unicaOne(
                                   fontSize: 13.0,
                                   color: Colors.white,
@@ -197,21 +202,14 @@ class _ProfileViewState extends State<ProfileView> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.18,
                               ),
-                              Text(
-                                "Gold",
-                                style: GoogleFonts.unicaOne(
-                                  fontSize: 15.0,
-                                  color: Colors.white,
-                                ),
-                              ),
                             ],
                           ),
                           SimpleAnimationProgressBar(
                             height: 10,
-                            width: 250,
+                            width: 230,
                             backgroundColor: Colors.grey.shade800,
-                            foregrondColor: ColorTheme.progresshBarColor,
-                            ratio: 0.5,
+                            foregrondColor: Color.fromARGB(255, colorR, colorG, colorB),
+                            ratio: percent,
                             direction: Axis.horizontal,
                             curve: Curves.fastLinearToSlowEaseIn,
                             duration: const Duration(seconds: 2),
