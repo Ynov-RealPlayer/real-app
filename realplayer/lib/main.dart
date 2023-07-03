@@ -13,10 +13,12 @@ import 'view/UploadPost.view.dart';
 import 'services/auth_service.dart';
 
 void main() async {
+  Map<String, dynamic> userData = {};
   WidgetsFlutterBinding.ensureInitialized();
   final isLoggedIn = await AuthService.isLoggedIn();
-  final userData = await ProfileService()
-      .fetchUserData();
+  if (isLoggedIn == true) {
+    userData = await ProfileService().fetchUserData();
+  }
   runApp(MyApp(isLoggedIn: isLoggedIn, userData: userData));
 }
 

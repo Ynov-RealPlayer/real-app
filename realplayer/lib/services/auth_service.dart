@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthService {
   static const apiUrl = "https://realplayer.fr/api";
 
-  static Future<Map<String, dynamic>> login(String email, String password) async {
+  static Future<Map<String, dynamic>> login(
+      String email, String password) async {
     final response = await http.post(Uri.parse('$apiUrl/login'), body: {
       "email": email,
       "password": password,
@@ -21,7 +22,8 @@ class AuthService {
     }
   }
 
-  static Future<Map<String, dynamic>> register(String pseudo, String email, String password, String confirmPassword) async {
+  static Future<Map<String, dynamic>> register(String pseudo, String email,
+      String password, String confirmPassword) async {
     final response = await http.post(Uri.parse('$apiUrl/register'), body: {
       "pseudo": pseudo,
       "email": email,
@@ -65,13 +67,18 @@ class AuthService {
     );
     if (response.statusCode == 200) {
       return true;
+    } else {
+      return false;
     }
-    return false;
   }
 
   static Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    return token != null && token.isNotEmpty && await verifyToken();
+    if (token != '' && await verifyToken() == true) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
