@@ -1,22 +1,21 @@
 import 'dart:convert';
 import 'dart:async';
-import 'dart:core';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:realplayer/services/auth_service.dart';
+import 'package:realplayer/services/category_service.dart';
 import 'package:realplayer/services/media_service.dart';
+import 'package:realplayer/services/user_service.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:realplayer/view/Boutique.View.dart';
 import 'package:realplayer/view/CoinShop.View.dart';
 import 'package:realplayer/view/Media.view.dart';
 import 'package:realplayer/view/Profile.View.dart';
-import 'package:http/http.dart' as http;
-import 'package:realplayer/services/category_service.dart';
-import 'package:realplayer/view/components/AppBar.view.dart';
-import 'package:flutter/material.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,6 +31,8 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   int? _selectedCategoryId;
   String? _selectedCategoryName;
+  final _searchController = TextEditingController();
+  final _userService = UserService();
 
   Future<void> _fetchCategories() async {
     _categories = await CategoryService.fetchCategories();
@@ -81,9 +82,114 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _searchController.dispose();
+    _userService.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarHome(),
+      appBar: AppBar(
+        backgroundColor: ColorTheme.backgroundColor,
+        elevation: 0,
+        actions: [
+          IconButton(
+            iconSize: 35,
+            onPressed: () {
+              Navigator.pushNamed(context, '/RatingPage');
+            },
+            icon: SvgPicture.asset(
+              "assets/icons/rating.svg",
+            ),
+            color: Colors.white,
+          ),
+          Stack(
+            children: [
+              IconButton(
+                iconSize: 40,
+                onPressed: () {},
+                icon: SvgPicture.asset(
+                  "assets/icons/notif.svg",
+                ),
+                color: Colors.white,
+              ),
+              Positioned(
+                top: 1,
+                left: 29,
+                child: badges.Badge(
+                  badgeContent: Text(
+                    '3',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+        flexibleSpace: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8, top: 5),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    _userService.searchUser(value);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Recherche',
+                    hintStyle: GoogleFonts.unicaOne(
+                      color: Colors.grey,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    filled: true,
+                    fillColor: ColorTheme.buttonColor.withOpacity(0.8),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 15.0,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: const Icon(Icons.search,
+                        color: Colors.grey, size: 28.0),
+                  ),
+                ),
+                StreamBuilder<List<dynamic>>(
+                  stream: _userService.searchResults,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          var user = snapshot.data![index];
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(user['picture']),
+                            ),
+                            title: Text(user['pseudo']),
+                          );
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                        'Erreur de recherche : ${snapshot.error}',
+                      );
+                    } else {
+                      return SizedBox.shrink(); // Ne rien afficher par défaut
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           Column(
@@ -93,7 +199,11 @@ class _HomePageState extends State<HomePage> {
                 color: ColorTheme.backgroundColor,
                 height: 70.0,
                 padding: const EdgeInsets.only(
-                    left: 7.0, right: 2.0, top: 3.0, bottom: 12.0),
+                  left: 7.0,
+                  right: 2.0,
+                  top: 3.0,
+                  bottom: 12.0,
+                ),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: _categories.length,
@@ -155,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                         return GridView.builder(
                           itemCount: mediaList.length,
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 10.0,
                             crossAxisSpacing: 10.0,
@@ -186,9 +296,9 @@ class _HomePageState extends State<HomePage> {
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) =>
                                         CircularProgressIndicator(
-                                      strokeWidth: 2.0,
-                                      color: ColorTheme.buttonColor,
-                                    ),
+                                          strokeWidth: 2.0,
+                                          color: ColorTheme.buttonColor,
+                                        ),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                   ),

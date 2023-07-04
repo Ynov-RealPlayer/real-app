@@ -32,6 +32,7 @@ class _appBarHomeState extends State<appBarHome> {
     _searchController.dispose();
     _userService.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     _isSearchBarEmpty = _searchController.text.isEmpty;
