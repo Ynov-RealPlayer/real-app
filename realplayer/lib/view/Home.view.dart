@@ -159,31 +159,49 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.grey, size: 28.0),
                   ),
                 ),
-                StreamBuilder<List<dynamic>>(
-                  stream: _userService.searchResults,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          var user = snapshot.data![index];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: NetworkImage(user['picture']),
-                            ),
-                            title: Text(user['pseudo']),
-                          );
-                        },
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                        'Erreur de recherche : ${snapshot.error}',
-                      );
-                    } else {
-                      return SizedBox.shrink(); // Ne rien afficher par défaut
-                    }
-                  },
+                Container(
+                  decoration: BoxDecoration(
+                    color: ColorTheme.buttonColor.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: StreamBuilder<List<dynamic>>(
+                    stream: _userService.searchResults,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            var user = snapshot.data![index];
+                            return Column(
+                              children: <Widget>[
+                                ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(user['picture']),
+                                  ),
+                                  title: Text(
+                                    user['pseudo'],
+                                    style: GoogleFonts.unicaOne(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                Divider(color: Colors.white),
+                              ],
+                            );
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text(
+                          'Erreur de recherche : ${snapshot.error}',
+                        );
+                      } else {
+                        return SizedBox.shrink(); // Ne rien afficher par défaut
+                      }
+                    },
+                  ),
                 ),
               ],
             ),
@@ -265,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                         return GridView.builder(
                           itemCount: mediaList.length,
                           gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 10.0,
                             crossAxisSpacing: 10.0,
@@ -296,9 +314,9 @@ class _HomePageState extends State<HomePage> {
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) =>
                                         CircularProgressIndicator(
-                                          strokeWidth: 2.0,
-                                          color: ColorTheme.buttonColor,
-                                        ),
+                                      strokeWidth: 2.0,
+                                      color: ColorTheme.buttonColor,
+                                    ),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                   ),
