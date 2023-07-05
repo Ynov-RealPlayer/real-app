@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:realplayer/services/auth_service.dart';
@@ -12,6 +13,7 @@ import 'package:realplayer/view/Media.view.dart';
 import 'package:realplayer/view/Profile.View.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:realplayer/services/category_service.dart';
+import 'package:realplayer/view/ProfileOtherUser.View.dart';
 import 'package:realplayer/view/components/AppBar.view.dart';
 
 class HomePage extends StatefulWidget {
@@ -326,14 +328,14 @@ class _HomePageState extends State<HomePage> {
                           children: <Widget>[
                             ListTile(
                               onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => ProfileOtherUser(
-                                //       userId: user['id'],
-                                //     ),
-                                //   ),
-                                // );
+                                 Navigator.push(
+                                   context,
+                                   MaterialPageRoute(
+                                     builder: (context) => ProfileOtherUserView(
+                                       idUser: user['id'],
+                                     ),
+                                   ),
+                                 );
                                 print('je tape le porfile');
                               },
                               leading: CircleAvatar(

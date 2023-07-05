@@ -195,7 +195,7 @@ class _ProfileOtherUserViewState extends State<ProfileOtherUserView> {
                             height: 10,
                             width: 230,
                             backgroundColor: Colors.grey.shade800,
-                            foregrondColor: ColorTheme.progresshBarColor,
+                            foregrondColor: Color.fromARGB(255, colorR, colorG, colorB),
                             ratio: percent,
                             direction: Axis.horizontal,
                             curve: Curves.fastLinearToSlowEaseIn,

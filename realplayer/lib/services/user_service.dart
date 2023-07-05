@@ -77,6 +77,7 @@ class UserService {
 
   void dispose() {
     _searchController.close();
+  }
 
   Future<Map<String, dynamic>> fetchOtherUserData(int id) async {
     final token = await AuthService.getToken();
