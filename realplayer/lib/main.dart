@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:realplayer/navigator.dart';
 import 'package:realplayer/services/profile_service.dart';
+import 'package:realplayer/view/Boutique.View.dart';
 import 'package:realplayer/view/Home.view.dart';
 import 'package:realplayer/view/Notif.view.dart';
 import 'package:realplayer/view/OnBoarding.view.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
             ProfileEdit(userData: Future.value(userData)),
         '/RatingPage': (context) => const RatingPage(),
         '/NotifPage': (context) => const NotifPage(),
+        '/BoutiquePage': (context) => const BoutiquePage(),
       },
     );
   }

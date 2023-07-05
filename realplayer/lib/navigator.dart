@@ -24,7 +24,7 @@ class _MainNavigatorState extends State<MainNavigator> {
     HomePage(),
     CoinShopView(),
     UploadPost(),
-    BoutiqueView(),
+    BoutiquePage(),
   ];
 
   @override
