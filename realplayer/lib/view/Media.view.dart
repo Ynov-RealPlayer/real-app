@@ -322,7 +322,7 @@ class _MediaPageState extends State<MediaPage> {
             builder: (context, snapshot) {
               if (comProfilePhotoUrl.isEmpty) {
                 return CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/logo-real.png'),
+                  backgroundImage: AssetImage('assets/images/logo_real.png'),
                 );
               } else {
                 return CachedNetworkImage(
@@ -343,10 +343,10 @@ class _MediaPageState extends State<MediaPage> {
                     ),
                   ),
                   placeholder: (context, url) => CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/logo-real.png'),
+                    backgroundImage: AssetImage('assets/images/logo_real.png'),
                   ),
                   errorWidget: (context, url, error) => CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/logo-real.png'),
+                    backgroundImage: AssetImage('assets/images/logo_real.png'),
                   ),
                 );
               }
