@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -25,8 +23,6 @@ class _UploadPostState extends State<UploadPost> {
 
   List<dynamic> _categories = [];
   List<DropdownMenuItem<int>> _dropdownMenuItems = [];
-
-  late Future<List<dynamic>> _data;
 
   Future getImage() async {
     showDialog(
@@ -274,12 +270,12 @@ class _UploadPostState extends State<UploadPost> {
                     'Catégorie :',
                     style: GoogleFonts.unicaOne(
                       fontSize: 18,
-                      color: Colors.white, // Changement de la couleur du texte en bleu
+                      color: Colors.white, 
                     ),
                   ),
                 ),
                 SizedBox(height: 16),
-                if (_dropdownMenuItems != null) // condition de garde
+                if (_dropdownMenuItems != null)
                   Theme(
                     data: Theme.of(context).copyWith(
                       canvasColor: Color(0xff1d2b34),
@@ -288,7 +284,7 @@ class _UploadPostState extends State<UploadPost> {
                       child: DropdownButtonFormField<int>(
                         value: _categoryIDController.text.isNotEmpty ? int.parse(_categoryIDController.text) : null,
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0), // réduction de la taille du champ
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                           hintText: 'Choisissez une catégorie',
                           hintStyle: TextStyle(
                             fontSize: 18,
@@ -304,7 +300,7 @@ class _UploadPostState extends State<UploadPost> {
                           ),
                         ),
                         style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                          color: Colors.white, // Changement de la couleur du texte en bleu
+                          color: Colors.white,
                         ),
                         items: _dropdownMenuItems,
                         onChanged: (value) {
@@ -315,9 +311,6 @@ class _UploadPostState extends State<UploadPost> {
                       ),
                     ),
                   ),
-// ...
-
-
                 SizedBox(height: 50),
                 Center(
                   child: ElevatedButton(
@@ -325,8 +318,8 @@ class _UploadPostState extends State<UploadPost> {
                     child: Text(
                       'Upload',
                       style: GoogleFonts.unicaOne(
-                        fontSize: 26, // Ajout de la taille de la police
-                        color: Colors.white, // Ajout de la couleur du texte
+                        fontSize: 26, 
+                        color: Colors.white,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(

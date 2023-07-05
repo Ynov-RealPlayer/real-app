@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realplayer/themes/color.dart';
+import 'package:realplayer/view/ProfileOtherUser.View.dart';
 import '../services/media_service.dart';
 import '../services/user_service.dart';
 
@@ -162,12 +163,21 @@ class _MediaPageState extends State<MediaPage> {
                           Expanded(
                             child: CachedNetworkImage(
                               imageUrl: profilePhotoUrl,
-                              imageBuilder: (context, imageProvider) =>
-                                  CircleAvatar(
-                                backgroundImage: imageProvider,
-                                radius:
-                                    20, // Ajustez cette valeur pour réduire la taille du CircleAvatar
-                                  ),
+                              imageBuilder: (context, imageProvider) => GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfileOtherUserView(
+                                        idUser: user_id,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  backgroundImage: imageProvider,
+                                ),
+                              ),
                             ),
                           ),
                           Row(
@@ -312,19 +322,31 @@ class _MediaPageState extends State<MediaPage> {
             builder: (context, snapshot) {
               if (comProfilePhotoUrl.isEmpty) {
                 return CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/logo-real.png'),
+                  backgroundImage: AssetImage('assets/images/logo_real.png'),
                 );
               } else {
                 return CachedNetworkImage(
                   imageUrl: comProfilePhotoUrl,
-                  imageBuilder: (context, imageProvider) => CircleAvatar(
-                    backgroundImage: imageProvider,
+                  imageBuilder: (context, imageProvider) => GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileOtherUserView(
+                            idUser: user_id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: CircleAvatar(
+                      backgroundImage: imageProvider,
+                    ),
                   ),
                   placeholder: (context, url) => CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/logo-real.png'),
+                    backgroundImage: AssetImage('assets/images/logo_real.png'),
                   ),
                   errorWidget: (context, url, error) => CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/logo-real.png'),
+                    backgroundImage: AssetImage('assets/images/logo_real.png'),
                   ),
                 );
               }

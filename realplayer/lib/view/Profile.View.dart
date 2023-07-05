@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:realplayer/navigator.dart';
+import 'package:realplayer/services/auth_service.dart';
 import 'package:realplayer/services/profile_service.dart';
+import 'package:realplayer/services/user_service.dart';
 import 'package:realplayer/themes/color.dart';
-import 'package:realplayer/view/Home.view.dart';
-import 'package:realplayer/view/ProfileEdit.view.dart';
+import 'package:realplayer/view/login.View.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
 
 class ProfileView extends StatefulWidget {
@@ -19,6 +19,7 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView> {
   final profileService = ProfileService();
   late Future<Map<String, dynamic>> _userData;
+  List<String> badgeIcons = [];
 
   @override
   void initState() {
@@ -27,8 +28,8 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void _navigateToHome() {
-    Navigator.of(context)
-    .pushNamedAndRemoveUntil('/MainNavigator', (Route<dynamic> route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        '/MainNavigator', (Route<dynamic> route) => false);
   }
 
   Future<Map<String, dynamic>> _fetchUserData() async {
@@ -43,15 +44,28 @@ class _ProfileViewState extends State<ProfileView> {
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
           final userData = snapshot.data!;
+          print(userData);
           final String pseudo = userData['pseudo'];
-          final String description = userData['description'];
+          final String description = userData['description'] ?? '';
           final String picture = userData['picture'];
           final String banner = userData['banner'];
+          final int colorR = userData['bar_colors'][0];
+          final int colorG = userData['bar_colors'][1];
+          final int colorB = userData['bar_colors'][2];
+          final double percent = userData['xp_progress'];
+          final String rank = userData['rank']['name'];
           final int experience = userData['experience'];
           final List<dynamic> medias = userData['medias'];
           final int mediaCount = medias.length;
           int totalComments = 0;
           int totalLikes = 0;
+          for (var badge in userData['badges']) {
+            final icon = badge['badge']['icon'];
+            badgeIcons.add(icon);
+          }
+          for (var icon in badgeIcons) {
+            print(icon);
+          }
           medias.forEach((media) {
             totalComments += (media['nb_comments'] as num).toInt();
           });
@@ -163,22 +177,22 @@ class _ProfileViewState extends State<ProfileView> {
                               color: Colors.white,
                             ),
                           ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //   children: const [
-                          //     Icon(Icons.home, color: Colors.white),
-                          //     Icon(Icons.search, color: Colors.white),
-                          //     Icon(Icons.notifications, color: Colors.white),
-                          //     Icon(Icons.person, color: Colors.white),
-                          //   ],
-                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: badgeIcons
+                                .map((icon) => Text(
+                                      icon,
+                                      style: TextStyle(fontSize: 20),
+                                    ))
+                                .toList(),
+                          ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.005,
                           ),
                           Row(
                             children: [
                               Text(
-                                "Silver",
+                                rank,
                                 style: GoogleFonts.unicaOne(
                                   fontSize: 15.0,
                                   color: Colors.white,
@@ -188,7 +202,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 width: MediaQuery.of(context).size.width * 0.18,
                               ),
                               Text(
-                                "50%",
+                                (percent*100).toString() + "%",
                                 style: GoogleFonts.unicaOne(
                                   fontSize: 13.0,
                                   color: Colors.white,
@@ -197,21 +211,14 @@ class _ProfileViewState extends State<ProfileView> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.18,
                               ),
-                              Text(
-                                "Gold",
-                                style: GoogleFonts.unicaOne(
-                                  fontSize: 15.0,
-                                  color: Colors.white,
-                                ),
-                              ),
                             ],
                           ),
                           SimpleAnimationProgressBar(
                             height: 10,
-                            width: 250,
+                            width: 230,
                             backgroundColor: Colors.grey.shade800,
-                            foregrondColor: ColorTheme.progresshBarColor,
-                            ratio: 0.5,
+                            foregrondColor: Color.fromARGB(255, colorR, colorG, colorB),
+                            ratio: percent,
                             direction: Axis.horizontal,
                             curve: Curves.fastLinearToSlowEaseIn,
                             duration: const Duration(seconds: 2),
@@ -223,7 +230,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                 ),
                 Positioned(
-                  top: MediaQuery.of(context).size.height * 0.36,
+                  top: MediaQuery.of(context).size.height * 0.38,
                   left: 16.0,
                   child: Container(
                     width: MediaQuery.of(context).size.width - 32.0,
@@ -328,8 +335,7 @@ class _ProfileViewState extends State<ProfileView> {
                     child: Row(
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                          },
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             primary: ColorTheme.buttonColor,
                             padding: EdgeInsets.symmetric(
@@ -347,7 +353,27 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                         ),
                         SizedBox(width: 10),
-                        SvgPicture.asset("assets/icons/iconForbidden.svg"),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ColorTheme.buttonColor,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.exit_to_app,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              AuthService.removeToken();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),

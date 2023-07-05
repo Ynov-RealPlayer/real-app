@@ -1,12 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../services/auth_service.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../navigator.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,7 +15,8 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _navigateToHome() {
-    Navigator.pushNamed(context, '/MainNavigator');
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        '/MainNavigator', (Route<dynamic> route) => false);
   }
 
   @override
@@ -92,7 +89,6 @@ class _LoginPageState extends State<LoginPage> {
                                         );
                                       } else {
                                         if (_formKey.currentState!.validate()) {
-
                                           try {
                                             await AuthService.login(
                                                 _emailController.text,

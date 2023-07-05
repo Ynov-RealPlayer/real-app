@@ -1,7 +1,6 @@
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:realplayer/view/UploadPost.view.dart';
@@ -99,7 +98,7 @@ class _MainNavigatorState extends State<MainNavigator> {
                 ),
               ],
             )
-          : null, // Ne pas afficher la bottomNavigationBar sur la page de profil
+          : null,
     );
   }
 }

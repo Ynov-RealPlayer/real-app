@@ -15,7 +15,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _password2Controller = TextEditingController();
   final GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>(); // Clé pour valider le formulaire
+      GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   _emailController.text,
                                                   _passwordController.text,
                                                   _password2Controller.text);
-                                          // L'inscription a réussi
                                           print(user);
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
@@ -101,7 +100,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                                     "Bravo, vous êtes inscrit !")),
                                           );
                                         } catch (e) {
-                                          // L'inscription a échoué
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(

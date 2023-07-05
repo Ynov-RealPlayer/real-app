@@ -4,7 +4,6 @@ import 'package:realplayer/view/login.view.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realplayer/themes/string.dart';
-import 'package:realplayer/view/Home.view.dart';
 
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({super.key});
@@ -135,20 +134,20 @@ class OnBoard  {
 
 final List<OnBoard> demo_data = [
   OnBoard(
-    image: "assets/images/logo-real.png",
+    image: "assets/images/logo_real.png",
     title: "Bienvenue sur ${StringConstants.appName}",
     description: "Le but de cette application est de créer une plateforme pour les gamers afin qu’ils puissent partager leurs expériences "
         "de jeu sous la forme de screens ou de clips. Nous cherchons "
         "à offrir une expérience personnalisée pour chaque utilisateur, en fonction de leur préférence et de leurs jeux.",
   ),
   OnBoard(
-    image: 'assets/images/logo-real.png',
+    image: 'assets/images/logo_real.png',
     title: "Description de l'application",
     description: "L'application ${StringConstants.appName} consiste à partager des screenshots ou des clips de vos meilleurs moments de jeux. "
         "Vous pouvez également suivre vos amis et ainsi voir leurs meilleurs moments de jeux.",
   ),
   OnBoard(
-    image: 'assets/images/logo-real.png',
+    image: 'assets/images/logo_real.png',
     title: "A vos partages",
     description: "Vous pouvez des à présent vous connecter pour profiter de toutes les fonctionnalités de l'application et ainsi postez vos meilleurs gameplay ! Bon jeux à toutes et à tous !",
   ),

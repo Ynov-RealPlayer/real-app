@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:realplayer/navigator.dart';
 import 'package:realplayer/services/profile_service.dart';
 import 'package:realplayer/view/Home.view.dart';
+import 'package:realplayer/view/Notif.view.dart';
 import 'package:realplayer/view/OnBoarding.view.dart';
 import 'package:realplayer/view/Profile.View.dart';
 import 'package:realplayer/view/ProfileEdit.View.dart';
@@ -12,10 +13,12 @@ import 'view/UploadPost.view.dart';
 import 'services/auth_service.dart';
 
 void main() async {
+  Map<String, dynamic> userData = {};
   WidgetsFlutterBinding.ensureInitialized();
   final isLoggedIn = await AuthService.isLoggedIn();
-  final userData = await ProfileService()
-      .fetchUserData(); // Récupère les données utilisateur à l'aide du service ProfileService
+  if (isLoggedIn == true) {
+    userData = await ProfileService().fetchUserData();
+  }
   runApp(MyApp(isLoggedIn: isLoggedIn, userData: userData));
 }
 
@@ -29,17 +32,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: isLoggedIn ? const MainNavigator() : OnBoardingView(),
+      home: isLoggedIn ? MainNavigator() : OnBoardingView(),
       routes: {
         '/UploadPost': (context) => UploadPost(),
         '/RegisterPage': (context) => RegisterPage(),
         '/LoginPage': (context) => LoginPage(),
-        '/HomePage': (context) => HomePage(),
+        '/HomePage': (context) => const HomePage(),
         '/ProfilePage': (context) => ProfileView(),
-        '/MainNavigator': (context) => MainNavigator(),
+        '/MainNavigator': (context) => const MainNavigator(),
         '/ProfileEdit': (context) =>
             ProfileEdit(userData: Future.value(userData)),
-        '/RatingPage': (context) => RatingPage(),
+        '/RatingPage': (context) => const RatingPage(),
+        '/NotifPage': (context) => const NotifPage(),
       },
     );
   }

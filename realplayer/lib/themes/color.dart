@@ -1,5 +1,3 @@
-//create class ColorTheme
-
 import 'package:flutter/material.dart';
 
 class ColorTheme {

@@ -54,7 +54,9 @@ class _appBarHomeState extends State<appBarHome> {
           children: [
             IconButton(
               iconSize: 40,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/NotifPage');
+              },
               icon: SvgPicture.asset(
                 "assets/icons/notif.svg",
               ),

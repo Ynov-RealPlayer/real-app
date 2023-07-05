@@ -91,7 +91,6 @@ class MediaService {
 
   static Future<Map<String, dynamic>> likeMedia(
       int mediaId, String type) async {
-    //type = Media or Commentary
     final token = await AuthService.getToken();
     final response = await http.post(
       Uri.parse('$apiUrl/likes'),
