@@ -6,5 +6,6 @@ class ColorTheme {
   static const Color buttonColor = Color(0xF00272cd);
   static const Color searchBarColor = Color.fromARGB(157, 2, 114, 205);
   static const Color progresshBarColor = Color(0xFFFF5E03);
+  static const Color cardColor = Color.fromARGB(255, 2, 114, 205);
 
 }

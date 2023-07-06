@@ -1,12 +1,19 @@
 import 'dart:async';
-import 'dart:core';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:realplayer/services/auth_service.dart';
+import 'package:realplayer/services/category_service.dart';
 import 'package:realplayer/services/media_service.dart';
+import 'package:realplayer/services/user_service.dart';
 import 'package:realplayer/themes/color.dart';
 import 'package:realplayer/view/Media.view.dart';
+import 'package:realplayer/view/Profile.View.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:realplayer/services/category_service.dart';
+import 'package:realplayer/view/ProfileOtherUser.View.dart';
 import 'package:realplayer/view/components/AppBar.view.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,6 +30,8 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   int? _selectedCategoryId;
   String? _selectedCategoryName;
+  final _searchController = TextEditingController();
+  final _userService = UserService();
 
   Future<void> _fetchCategories() async {
     _categories = await CategoryService.fetchCategories();
@@ -72,9 +81,89 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _searchController.dispose();
+    _userService.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarHome(),
+      appBar: AppBar(
+        backgroundColor: ColorTheme.backgroundColor,
+        elevation: 0,
+        actions: [
+          IconButton(
+            iconSize: 35,
+            onPressed: () {
+              Navigator.pushNamed(context, '/RatingPage');
+            },
+            icon: SvgPicture.asset(
+              "assets/icons/rating.svg",
+            ),
+            color: Colors.white,
+          ),
+          Stack(
+            children: [
+              IconButton(
+                iconSize: 40,
+                onPressed: () {},
+                icon: SvgPicture.asset(
+                  "assets/icons/notif.svg",
+                ),
+                color: Colors.white,
+              ),
+              Positioned(
+                top: 1,
+                left: 29,
+                child: badges.Badge(
+                  badgeContent: Text(
+                    '3',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+        flexibleSpace: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 110, top: 5),
+            child: TextField(
+              style: GoogleFonts.unicaOne(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w400,
+              ),
+              controller: _searchController,
+              onChanged: (value) {
+                _userService.searchUser(value);
+              },
+              decoration: InputDecoration(
+                hintText: 'Recherche',
+                hintStyle: GoogleFonts.unicaOne(
+                  color: Colors.grey,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w400,
+                ),
+                filled: true,
+                fillColor: ColorTheme.buttonColor.withOpacity(0.8),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                  horizontal: 15.0,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                  borderSide: BorderSide.none,
+                ),
+                prefixIcon: const Icon(Icons.search,
+                    color: Colors.grey, size: 28.0),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           Column(
@@ -84,7 +173,11 @@ class _HomePageState extends State<HomePage> {
                 color: ColorTheme.backgroundColor,
                 height: 70.0,
                 padding: const EdgeInsets.only(
-                    left: 7.0, right: 2.0, top: 3.0, bottom: 12.0),
+                  left: 7.0,
+                  right: 15.0,
+                  top: 10.0,
+                  bottom: 6.0,
+                ),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: _categories.length,
@@ -103,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
                         padding: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
                           color: _currentSliderIndex == index
@@ -146,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                         return GridView.builder(
                           itemCount: mediaList.length,
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 10.0,
                             crossAxisSpacing: 10.0,
@@ -177,9 +270,9 @@ class _HomePageState extends State<HomePage> {
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) =>
                                         CircularProgressIndicator(
-                                      strokeWidth: 2.0,
-                                      color: ColorTheme.buttonColor,
-                                    ),
+                                          strokeWidth: 2.0,
+                                          color: ColorTheme.buttonColor,
+                                        ),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                   ),
@@ -210,6 +303,69 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ],
+          ),
+          Positioned(
+            top: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10, right: 110.0),
+              child: Container(
+              decoration: BoxDecoration(
+                color: ColorTheme.buttonColor.withOpacity(1),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: StreamBuilder<List<dynamic>>(
+                stream: _userService.searchResults,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        var user = snapshot.data![index];
+                        return Column(
+                          children: <Widget>[
+                            ListTile(
+                              onTap: () {
+                                 Navigator.push(
+                                   context,
+                                   MaterialPageRoute(
+                                     builder: (context) => ProfileOtherUserView(
+                                       idUser: user['id'],
+                                     ),
+                                   ),
+                                 );
+                                print('je tape le porfile');
+                              },
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(user['picture']),
+                              ),
+                              title: Text(
+                                user['pseudo'],
+                                style: GoogleFonts.unicaOne(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            Divider(color: Colors.white),
+                          ],
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text(
+                      'Erreur de recherche : ${snapshot.error}',
+                    );
+                  } else {
+                    return SizedBox.shrink(); // Ne rien afficher par défaut
+                  }
+                },
+              ),
+            ),
+          ),
           ),
         ],
       ),

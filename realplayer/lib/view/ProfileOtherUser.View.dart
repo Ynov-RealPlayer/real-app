@@ -24,6 +24,7 @@ class ProfileOtherUserView extends StatefulWidget {
 class _ProfileOtherUserViewState extends State<ProfileOtherUserView> {
   final userService = UserService();
   late Future<Map<String, dynamic>> _userData;
+  List<String> badgeIcons = [];
 
   @override
   void initState() {
@@ -45,6 +46,7 @@ class _ProfileOtherUserViewState extends State<ProfileOtherUserView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
+
       future: _userData,
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
@@ -63,6 +65,13 @@ class _ProfileOtherUserViewState extends State<ProfileOtherUserView> {
           final int mediaCount = medias.length;
           int totalComments = 0;
           int totalLikes = 0;
+          for (var badge in userData['badges']) {
+            final icon = badge['badge']['icon'];
+            badgeIcons.add(icon);
+          }
+          for (var icon in badgeIcons) {
+            print(icon);
+          }
           medias.forEach((media) {
             totalComments += (media['nb_comments'] as num).toInt();
           });
@@ -155,15 +164,15 @@ class _ProfileOtherUserViewState extends State<ProfileOtherUserView> {
                               color: Colors.white,
                             ),
                           ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //   children: const [
-                          //     Icon(Icons.home, color: Colors.white),
-                          //     Icon(Icons.search, color: Colors.white),
-                          //     Icon(Icons.notifications, color: Colors.white),
-                          //     Icon(Icons.person, color: Colors.white),
-                          //   ],
-                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: badgeIcons
+                                .map((icon) => Text(
+                              icon,
+                              style: TextStyle(fontSize: 20),
+                            ))
+                                .toList(),
+                          ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.005,
                           ),
@@ -195,7 +204,7 @@ class _ProfileOtherUserViewState extends State<ProfileOtherUserView> {
                             height: 10,
                             width: 230,
                             backgroundColor: Colors.grey.shade800,
-                            foregrondColor: ColorTheme.progresshBarColor,
+                            foregrondColor: Color.fromARGB(255, colorR, colorG, colorB),
                             ratio: percent,
                             direction: Axis.horizontal,
                             curve: Curves.fastLinearToSlowEaseIn,
